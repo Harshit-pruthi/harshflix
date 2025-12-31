@@ -4,15 +4,10 @@
   <meta charset="UTF-8" />
   <title>Harshflix - Watch Anywhere</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <style>
     :root {
       --bg-color: #050816;
-      --bg-elevated: #101827;
-      --accent: #e50914;
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
       --card-radius: 0.5rem;
@@ -29,256 +24,6 @@
       overflow-x: hidden;
     }
 
-    /* NEW DETAILS MODAL */
-    .details-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .details-modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .details-modal-content {
-      width: 100%;
-      max-width: 900px;
-      max-height: 90vh;
-      background: rgba(10, 15, 30, 0.95);
-      border-radius: 0.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      overflow: hidden;
-      transform: scale(0.9);
-      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-      position: relative;
-    }
-
-    .details-modal-overlay.active .details-modal-content { transform: scale(1); }
-
-    .details-modal-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      color: #fff;
-      z-index: 100;
-    }
-
-    .details-modal-close:hover {
-      background: rgba(229, 9, 20, 0.9);
-      border-color: #e50914;
-      transform: rotate(90deg);
-    }
-
-    .details-modal-banner {
-      position: relative;
-      height: 400px;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      overflow: hidden;
-    }
-
-    .details-modal-banner-img {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-
-    .details-modal-banner::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(10, 15, 30, 0.95) 0%, transparent 50%);
-    }
-
-    .details-modal-banner-content {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 2rem;
-      z-index: 2;
-      background: linear-gradient(to top, rgba(10, 15, 30, 0.95), transparent);
-    }
-
-    .details-modal-title {
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      line-height: 1.1;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    }
-
-    .details-modal-subtitle {
-      font-size: 1.2rem;
-      color: #94a3b8;
-      margin-bottom: 1.5rem;
-      font-weight: 400;
-    }
-
-    .details-modal-badges {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .details-modal-badge {
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      background: rgba(229, 9, 20, 0.2);
-      border: 1px solid rgba(229, 9, 20, 0.5);
-      font-size: 0.9rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .details-modal-badge i {
-      color: #e50914;
-    }
-
-    .details-modal-body {
-      padding: 2rem;
-      max-height: calc(90vh - 400px);
-      overflow-y: auto;
-    }
-
-    .details-modal-section {
-      margin-bottom: 2rem;
-    }
-
-    .details-modal-section-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-      color: #e50914;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .details-modal-section-title i {
-      font-size: 1rem;
-    }
-
-    .details-modal-info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .details-modal-info-item {
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 0.5rem;
-      border-left: 3px solid #e50914;
-    }
-
-    .details-modal-info-label {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      margin-bottom: 0.25rem;
-    }
-
-    .details-modal-info-value {
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-
-    .details-modal-description {
-      line-height: 1.7;
-      color: #e5e7eb;
-      margin-bottom: 2rem;
-      font-size: 1.05rem;
-    }
-
-    .details-modal-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 2rem;
-    }
-
-    .details-modal-tag {
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      background: rgba(229, 9, 20, 0.15);
-      border: 1px solid rgba(229, 9, 20, 0.3);
-      font-size: 0.9rem;
-      color: #f8fafc;
-    }
-
-    .details-modal-actions {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .details-modal-btn {
-      padding: 1rem 2rem;
-      border-radius: 0.5rem;
-      border: none;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      min-width: 180px;
-    }
-
-    .details-modal-btn-primary {
-      background: linear-gradient(135deg, #e50914, #b20710);
-      color: white;
-      box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
-    }
-
-    .details-modal-btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(229, 9, 20, 0.6);
-      background: linear-gradient(135deg, #f40612, #e50914);
-    }
-
-    .details-modal-btn-secondary {
-      background: transparent;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      color: white;
-    }
-
-    .details-modal-btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.5);
-    }
-
-    /* ORIGINAL PERFECT UI */
     .nav {
       position: sticky;
       top: 0;
@@ -316,11 +61,7 @@
 
     .logo-pill span { font-size: 1.2rem; font-weight: 700; }
 
-    .brand-text {
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      font-size: 1.1rem;
-    }
+    .brand-text { font-weight: 600; letter-spacing: 0.06em; font-size: 1.1rem; }
 
     .nav-links {
       display: flex;
@@ -329,20 +70,10 @@
       font-size: 0.95rem;
     }
 
-    .nav-link {
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: color 0.2s ease;
-      position: relative;
-    }
-
+    .nav-link { color: var(--text-muted); cursor: pointer; transition: color 0.2s ease; }
     .nav-link:hover { color: var(--text-main); }
 
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
+    .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
 
     .btn {
       border-radius: 999px;
@@ -356,25 +87,15 @@
       font-weight: 500;
     }
 
-    .btn-outline {
-      border-color: rgba(148,163,184,0.7);
-      color: var(--text-muted);
-    }
-
-    .btn-outline:hover {
-      border-color: #e5e7eb;
-      background: rgba(15,23,42,0.8);
-    }
+    .btn-outline { border-color: rgba(148,163,184,0.7); color: var(--text-muted); }
+    .btn-outline:hover { border-color: #e5e7eb; background: rgba(15,23,42,0.8); }
 
     .btn-primary {
       background: radial-gradient(circle, #f97316, #e11d48 50%, #6366f1);
       box-shadow: 0 8px 25px rgba(239,68,68,0.4);
     }
 
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 35px rgba(239,68,68,0.6);
-    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 35px rgba(239,68,68,0.6); }
 
     .hero {
       max-width: 1280px;
@@ -435,6 +156,17 @@
       display: flex;
       gap: 1rem;
       margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .hero-cta input {
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.8);
+      color: white;
+      width: 250px;
+      font-size: 0.95rem;
     }
 
     .glass-card {
@@ -451,15 +183,8 @@
       padding: 2rem 1.5rem;
     }
 
-    .section-header h2 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .section-subtitle {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
+    .section-header h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .section-subtitle { color: var(--text-muted); font-size: 0.85rem; }
 
     .cards-row {
       display: flex;
@@ -471,7 +196,6 @@
 
     .cards-row::-webkit-scrollbar { display: none; }
 
-    /* FIXED PERFECT NETFLIX CARDS */
     .movie-card {
       flex: 0 0 200px;
       height: 280px;
@@ -602,28 +326,19 @@
       text-align: center;
     }
 
-    /* RESPONSIVE */
     @media (max-width: 900px) {
       .hero { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1rem; }
       .nav-links { display: none; }
-      .details-modal-banner { height: 300px; }
-      .details-modal-title { font-size: 2.2rem; }
     }
 
     @media (max-width: 600px) {
       .movie-card { flex: 0 0 160px; height: 240px; }
       .hero { padding: 1.5rem 1rem; }
       .section { padding: 1.5rem 1rem; }
-      .details-modal-banner { height: 250px; }
-      .details-modal-title { font-size: 1.8rem; }
-      .details-modal-actions { flex-direction: column; }
-      .details-modal-btn { width: 100%; min-width: auto; }
-      .details-modal-info-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <!-- NAV -->
   <header class="nav">
     <div class="nav-inner">
       <div class="brand">
@@ -645,7 +360,6 @@
   </header>
 
   <main>
-    <!-- HERO -->
     <section class="hero">
       <div>
         <div class="hero-badge">
@@ -659,8 +373,8 @@
           Ready to watch? Enter your email to create or restart membership.
         </p>
         <div class="hero-cta">
-          <input placeholder="Email address" style="padding:0.75rem 1rem; border-radius:4px; border:1px solid rgba(148,163,184,0.6); background:rgba(15,23,42,0.8); color:white; width:250px;">
-          <button class="btn btn-primary" style="padding:0.75rem 2rem;">Get Started →</button>
+          <input placeholder="Email address">
+          <button class="btn btn-primary">Get Started →</button>
         </div>
       </div>
       <div class="glass-card">
@@ -669,25 +383,27 @@
       </div>
     </section>
 
-    <!-- TRENDING -->
     <section class="section">
       <div class="section-header">
         <h2>Trending Now</h2>
         <p class="section-subtitle">Popular on Harshflix</p>
       </div>
       <div class="cards-row" id="trending-row">
-        <!-- Cards will be generated here -->
+        <div style="padding:3rem 2rem; color:var(--text-muted); font-size:0.9rem; text-align:center;">
+          Loading trending titles...
+        </div>
       </div>
     </section>
 
-    <!-- SERIES -->
     <section class="section">
       <div class="section-header">
         <h2>TV Series</h2>
         <p class="section-subtitle">Binge-worthy shows</p>
       </div>
       <div class="cards-row" id="series-row">
-        <!-- Cards will be generated here -->
+        <div style="padding:3rem 2rem; color:var(--text-muted); font-size:0.9rem; text-align:center;">
+          Loading series...
+        </div>
       </div>
     </section>
   </main>
@@ -696,51 +412,6 @@
     Questions? Call 000-800-919-1694<br>
     <a style="color:#9ca3af;">Privacy</a> • <a style="color:#9ca3af;">Terms of Use</a> • <a style="color:#9ca3af;">Corporate Information</a>
   </footer>
-
-  <!-- DETAILS POPUP MODAL -->
-  <div class="details-modal-overlay" id="detailsModal">
-    <div class="details-modal-content">
-      <button class="details-modal-close" id="detailsModalClose">×</button>
-      
-      <div class="details-modal-banner">
-        <div class="details-modal-banner-img" id="detailsBannerImg"></div>
-        <div class="details-modal-banner-content">
-          <h1 class="details-modal-title" id="detailsTitle">Loading...</h1>
-          <div class="details-modal-subtitle" id="detailsSubtitle"></div>
-          <div class="details-modal-badges" id="detailsBadges"></div>
-        </div>
-      </div>
-      
-      <div class="details-modal-body">
-        <div class="details-modal-info-grid" id="detailsInfoGrid"></div>
-        
-        <div class="details-modal-section">
-          <div class="details-modal-section-title">
-            <i class="fas fa-align-left"></i> Synopsis
-          </div>
-          <p class="details-modal-description" id="detailsDescription">
-            Loading...
-          </p>
-        </div>
-        
-        <div class="details-modal-section">
-          <div class="details-modal-section-title">
-            <i class="fas fa-tags"></i> Genres
-          </div>
-          <div class="details-modal-tags" id="detailsTags"></div>
-        </div>
-        
-        <div class="details-modal-actions">
-          <button class="details-modal-btn details-modal-btn-primary" id="watchNowBtn">
-            <i class="fas fa-play"></i> Watch Now
-          </button>
-          <button class="details-modal-btn details-modal-btn-secondary" id="addToListBtn">
-            <i class="fas fa-plus"></i> Add to My List
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
@@ -758,122 +429,18 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Modal elements
-    const detailsModal = document.getElementById('detailsModal');
-    const detailsModalClose = document.getElementById('detailsModalClose');
-    const detailsTitle = document.getElementById('detailsTitle');
-    const detailsSubtitle = document.getElementById('detailsSubtitle');
-    const detailsBadges = document.getElementById('detailsBadges');
-    const detailsBannerImg = document.getElementById('detailsBannerImg');
-    const detailsInfoGrid = document.getElementById('detailsInfoGrid');
-    const detailsDescription = document.getElementById('detailsDescription');
-    const detailsTags = document.getElementById('detailsTags');
-    const watchNowBtn = document.getElementById('watchNowBtn');
-    const addToListBtn = document.getElementById('addToListBtn');
-
-    // Modal functions
-    function closeDetailsModal() { 
-      detailsModal.classList.remove('active');
-      document.body.style.overflow = 'auto';
-    }
-    
-    detailsModalClose.onclick = closeDetailsModal;
-    detailsModal.onclick = (e) => { 
-      if(e.target === detailsModal) closeDetailsModal(); 
-    };
-
-    // Close modal on Escape key
-    document.addEventListener('keydown', (e) => {
-      if(e.key === 'Escape' && detailsModal.classList.contains('active')) {
-        closeDetailsModal();
-      }
-    });
-
-    async function showDetailsModal(data) {
-      // Set basic info
-      detailsTitle.textContent = data.title || 'Untitled';
-      detailsSubtitle.textContent = data.subtitle || 'Brace for TV\'s most prestigious event! Ringing in the new year, this monumental award night honours the remarkable feats of Indian Television.';
-      detailsDescription.textContent = data.description || 'No description available.';
-      
-      // Set banner image
-      if (data.thumbnail) {
-        detailsBannerImg.style.backgroundImage = `url(${data.thumbnail})`;
-      } else {
-        detailsBannerImg.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)';
-      }
-      
-      // Set badges
-      const tags = Array.isArray(data.tags) ? data.tags : [];
-      const badgeIcons = ['award', 'crown', 'star', 'fire'];
-      detailsBadges.innerHTML = tags.slice(0, 3).map((tag, index) => `
-        <div class="details-modal-badge">
-          <i class="fas fa-${badgeIcons[index] || 'tag'}"></i>
-          ${tag}
-        </div>
-      `).join('') || '<div class="details-modal-badge"><i class="fas fa-film"></i> Movie</div>';
-      
-      // Set info grid
-      detailsInfoGrid.innerHTML = `
-        <div class="details-modal-info-item">
-          <div class="details-modal-info-label">Year</div>
-          <div class="details-modal-info-value">${data.year || '2025'}</div>
-        </div>
-        <div class="details-modal-info-item">
-          <div class="details-modal-info-label">Age Rating</div>
-          <div class="details-modal-info-value">${data.age || 'U/A 16+'}</div>
-        </div>
-        <div class="details-modal-info-item">
-          <div class="details-modal-info-label">Duration</div>
-          <div class="details-modal-info-value">${data.duration || '2h 15m'}</div>
-        </div>
-        <div class="details-modal-info-item">
-          <div class="details-modal-info-label">Language</div>
-          <div class="details-modal-info-value">${data.language || 'Hindi'}</div>
-        </div>
-        <div class="details-modal-info-item">
-          <div class="details-modal-info-label">Rating</div>
-          <div class="details-modal-info-value">★ ${data.rating ? data.rating.toFixed(1) : '8.5'}/10</div>
-        </div>
-        <div class="details-modal-info-item">
-          <div class="details-modal-info-label">Type</div>
-          <div class="details-modal-info-value">${data.type || 'Movie'}</div>
-        </div>
-      `;
-      
-      // Set tags
-      const genreTags = Array.isArray(data.genre) ? data.genre : 
-                       (data.genre ? [data.genre] : ['Action', 'Comedy', 'Corruption', 'Taking on the System']);
-      detailsTags.innerHTML = genreTags.map(genre => `
-        <div class="details-modal-tag">${genre}</div>
-      `).join('');
-      
-      // Set button actions
-      watchNowBtn.onclick = () => {
-        alert(`Now playing: ${data.title || 'Selected video'}`);
-        closeDetailsModal();
-      };
-      
-      addToListBtn.onclick = () => {
-        alert(`"${data.title || 'Video'}" added to My List!`);
-      };
-      
-      // Show modal
-      detailsModal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    // Create movie card
     function createCard(doc) {
       const data = doc.data();
       const card = document.createElement('article');
       card.className = 'movie-card';
-      card.dataset.id = doc.id;
+      card.dataset.videoId = doc.id;
+      card.dataset.videoSource = data.source || '';
 
       const badge = (Array.isArray(data.tags) ? data.tags.find(t => ['Trending','Top 10','New','Original'].includes(t)) : '') || (data.type || 'Movie');
 
       card.innerHTML = `
         <div class="movie-thumb">
-          ${data.thumbnail ? `<img src="${data.thumbnail}" alt="${data.title}" loading="lazy">` : ''}
+          ${data.thumbnail ? `<img src="${data.thumbnail}" alt="${data.title}">` : ''}
           <div class="thumb-overlay"></div>
           <div class="thumb-badge">${badge}</div>
           <div class="thumb-play">
@@ -883,55 +450,30 @@
         <div class="movie-info">
           <div class="movie-title">${data.title || 'Untitled'}</div>
           <div class="movie-meta">
-            <span>${data.duration || data.type === 'Series' ? 'S1' : 'Movie'}</span>
+            <span>${data.duration || (data.type === 'Series' ? 'S1' : 'Movie')}</span>
             <span class="pill-age">${data.age || '—'}</span>
           </div>
         </div>
       `;
 
-      card.onclick = async () => {
-        try {
-          const snap = await getDoc(doc(db, 'titles', doc.id));
-          if(snap.exists()) {
-            // Get additional data if available
-            const videoData = snap.data();
-            
-            // If no description, add a default one
-            if (!videoData.description) {
-              videoData.description = "Posted in the small town of Adavivaram, honest railway police officer Lakshman goes all-guns-blazing in a fight to bring down the ruthless drug lord Sivudu.";
-            }
-            
-            // If no subtitle, add a default one
-            if (!videoData.subtitle) {
-              videoData.subtitle = "Brace for TV's most prestigious event! Ringing in the new year, this monumental award night honours the remarkable feats of Indian Television.";
-            }
-            
-            showDetailsModal(videoData);
-          }
-        } catch(e) { 
-          console.error('Error loading video details:', e);
-          // Show modal with default data
-          showDetailsModal({
-            title: data.title || 'Untitled',
-            description: "Posted in the small town of Adavivaram, honest railway police officer Lakshman goes all-guns-blazing in a fight to bring down the ruthless drug lord Sivudu.",
-            subtitle: "Brace for TV's most prestigious event! Ringing in the new year, this monumental award night honours the remarkable feats of Indian Television.",
-            thumbnail: data.thumbnail,
-            year: data.year,
-            age: data.age,
-            duration: data.duration,
-            language: data.language,
-            rating: data.rating,
-            type: data.type,
-            tags: data.tags,
-            genre: data.genre
-          });
-        }
-      };
+      // CLICK OPENS PLAYER PAGE
+      card.addEventListener('click', () => {
+        const videoId = doc.id;
+        const videoSource = data.source || '';
+        const videoData = encodeURIComponent(JSON.stringify({
+          id: videoId,
+          title: data.title || 'Untitled',
+          thumbnail: data.thumbnail || '',
+          source: videoSource,
+          duration: data.duration || '',
+          genre: data.genre || ''
+        }));
+        window.open(`player.html?video=${videoData}`, '_blank');
+      });
 
       return card;
     }
 
-    // Render cards
     const trendingRow = document.getElementById('trending-row');
     const seriesRow = document.getElementById('series-row');
 
@@ -939,86 +481,28 @@
       trendingRow.innerHTML = '';
       seriesRow.innerHTML = '';
 
-      // Sample data if no Firebase data
-      const sampleData = [
-        {
-          id: 'sample1',
-          data: () => ({
-            title: 'Microsoft Revents',
-            subtitle: 'Brace for TV\'s most prestigious event!',
-            description: 'Posted in the small town of Adavivaram, honest railway police officer Lakshman goes all-guns-blazing in a fight to bring down the ruthless drug lord Sivudu.',
-            thumbnail: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-            year: '2025',
-            age: 'U/A 16+',
-            duration: '2h 15m',
-            language: 'Hindi',
-            rating: 8.5,
-            type: 'Movie',
-            tags: ['Trending', 'Awards', 'Latest Release'],
-            genre: ['Action', 'Comedy', 'Corruption', 'Taking on the System']
-          })
-        },
-        {
-          id: 'sample2',
-          data: () => ({
-            title: 'Oracle',
-            subtitle: 'The ultimate tech thriller',
-            description: 'A tech genius discovers a conspiracy that could change the world forever.',
-            thumbnail: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-            year: '2024',
-            age: 'U/A 13+',
-            duration: '1h 48m',
-            language: 'English',
-            rating: 7.9,
-            type: 'Movie',
-            tags: ['Top 10', 'Sci-Fi'],
-            genre: ['Sci-Fi', 'Thriller', 'Mystery']
-          })
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const tags = Array.isArray(data.tags) ? data.tags : [];
+        const card = createCard(doc);
+
+        if(tags.includes('Trending') || tags.includes('Top 10')) {
+          trendingRow.appendChild(card.cloneNode(true));
         }
-      ];
-
-      let hasData = false;
-      
-      if (snapshot && snapshot.forEach) {
-        snapshot.forEach(doc => {
-          hasData = true;
-          const data = doc.data();
-          const tags = Array.isArray(data.tags) ? data.tags : [];
-          const card = createCard(doc);
-
-          if(tags.includes('Trending') || tags.includes('Top 10')) {
-            trendingRow.appendChild(card.cloneNode(true));
-          }
-          if(data.type === 'Series') {
-            seriesRow.appendChild(card.cloneNode(true));
-          }
-        });
-      }
-
-      // If no data from Firebase, use sample data
-      if (!hasData || trendingRow.children.length === 0) {
-        sampleData.forEach(item => {
-          const card = createCard(item);
-          trendingRow.appendChild(card);
-        });
-      }
-
-      if(seriesRow.children.length === 0) {
-        seriesRow.innerHTML = '<div style="padding:3rem 2rem;color:var(--text-muted);text-align:center;">No series available at the moment</div>';
-      }
-    }
-
-    // Initialize Firebase listener
-    try {
-      onSnapshot(collection(db, 'titles'), render, (error) => {
-        console.error('Firebase error:', error);
-        // If Firebase fails, render sample data
-        render();
+        if(data.type === 'Series') {
+          seriesRow.appendChild(card.cloneNode(true));
+        }
       });
-    } catch (error) {
-      console.error('Firebase initialization error:', error);
-      render();
+
+      if(!trendingRow.children.length) {
+        trendingRow.innerHTML = '<div style="padding:3rem 2rem;color:var(--text-muted);">No trending titles yet</div>';
+      }
+      if(!seriesRow.children.length) {
+        seriesRow.innerHTML = '<div style="padding:3rem 2rem;color:var(--text-muted);">No series yet</div>';
+      }
     }
+
+    onSnapshot(collection(db, 'titles'), render);
   </script>
 </body>
 </html>
