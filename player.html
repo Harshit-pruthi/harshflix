@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Harshflix Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #000;
+      color: white;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .player-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .player-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      pointer-events: none;
+    }
+
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      pointer-events: auto;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .logo-pill {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f97316, #e11d48);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .back-btn {
+      margin-right: auto;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+
+    .back-btn:hover { background: rgba(255,255,255,0.1); }
+
+    .bottom-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      padding: 2rem 2rem 1rem;
+      pointer-events: auto;
+      z-index: 100;
+    }
+
+    .video-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .video-poster {
+      width: 60px;
+      height: 90px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #374151, #1f2937);
+      object-fit: cover;
+    }
+
+    .video-details h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .video-meta {
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+
+    .controls-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .play-pause-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #000;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .play-pause-btn:hover { transform: scale(1.05); }
+
+    .control-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: background 0.2s ease;
+    }
+
+    .control-btn:hover { background: rgba(255,255,255,0.1); }
+
+    .progress-container {
+      flex: 1;
+      height: 5px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 1rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #f97316, #e11d48);
+      border-radius: 5px;
+      width: 0%;
+      transition: width 0.1s ease;
+    }
+
+    .time-display {
+      font-size: 0.85rem;
+      color: white;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    .volume-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .volume-slider {
+      width: 80px;
+      height: 4px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .fullscreen-btn {
+      font-size: 1.6rem;
+      margin-left: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .top-bar, .bottom-controls { padding: 0 1rem; }
+      .video-info { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .controls-row { gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="player-container">
+    <video id="videoPlayer" controls preload="metadata">
+      Your browser does not support the video tag.
+    </video>
+
+    <div class="player-overlay">
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <button class="back-btn" onclick="window.close()">←</button>
+        <div class="logo">
+          <div class="logo-pill">H</div>
+          Harshflix
+        </div>
+      </div>
+
+      <!-- Bottom Controls -->
+      <div class="bottom-controls">
+        <div class="video-info">
+          <img id="videoPoster" class="video-poster" src="" alt="">
+          <div class="video-details">
+            <h2 id="videoTitle">Loading...</h2>
+            <div class="video-meta" id="videoMeta"></div>
+          </div>
+        </div>
+        
+        <div class="controls-row">
+          <button class="play-pause-btn" id="playPauseBtn">▶</button>
+          <div class="control-btn">⏩</div>
+          <div class="control-btn">↻</div>
+          
+          <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          
+          <div class="time-display">
+            <span id="currentTime">0:00</span> / <span id="durationTime">0:00</span>
+          </div>
+          
+          <div class="volume-container">
+            <button class="control-btn" id="volumeBtn">🔊</button>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.1" value="1">
+          </div>
+          <button class="control-btn fullscreen-btn" id="fullscreenBtn">⛶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoData = JSON.parse(decodeURIComponent(urlParams.get('video') || '{}'));
+
+    const video = document.getElementById('videoPlayer');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationTimeEl = document.getElementById('durationTime');
+    const volumeBtn = document.getElementById('volumeBtn');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const videoPoster = document.getElementById('videoPoster');
+    const videoTitle = document.getElementById('videoTitle');
+    const videoMeta = document.getElementById('videoMeta');
+
+    // Load video data
+    if (videoData.source) {
+      video.src = videoData.source;
+    } else {
+      video.src = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'; // Demo video
+    }
+
+    videoPoster.src = videoData.thumbnail || '';
+    videoTitle.textContent = videoData.title || 'Untitled';
+    videoMeta.textContent = `${videoData.duration || '—'} • ${videoData.genre || '—'}`;
+
+    // Play/Pause
+    playPauseBtn.addEventListener('click', togglePlay);
+    video.addEventListener('click', togglePlay);
+
+    function togglePlay() {
+      if (video.paused) {
+        video.play();
+        playPauseBtn.textContent = '⏸';
+      } else {
+        video.pause();
+        playPauseBtn.textContent = '▶';
+      }
+    }
+
+    // Progress
+    video.addEventListener('timeupdate', updateProgress);
+    video.addEventListener('loadedmetadata', () => {
+      durationTimeEl.textContent = formatTime(video.duration);
+    });
+
+    progressContainer.addEventListener('click', (e) => {
+      const rect = progressContainer.getBoundingClientRect();
+      const percent = (e.clientX - rect.left) / rect.width;
+      video.currentTime = percent * video.duration;
+    });
+
+    function updateProgress() {
+      const percent = (video.currentTime / video.duration) * 100;
+      progressBar.style.width = `${percent}%`;
+      currentTimeEl.textContent = formatTime(video.currentTime);
+    }
+
+    // Volume
+    volumeSlider.addEventListener('input', (e) => {
+      video.volume = e.target.value;
+      volumeBtn.textContent = video.volume > 0.5 ? '🔊' : video.volume > 0 ? '🔉' : '🔇';
+    });
+
+    // Fullscreen
+    fullscreenBtn.addEventListener('click', () => {
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        togglePlay();
+      }
+      if (e.code === 'ArrowRight') video.currentTime += 10;
+      if (e.code === 'ArrowLeft') video.currentTime -= 10;
+      if (e.code === 'ArrowUp') video.volume = Math.min(1, video.volume + 0.1);
+      if (e.code === 'ArrowDown') video.volume = Math.max(0, video.volume - 0.1);
+      if (e.code === 'KeyF') fullscreenBtn.click();
+    });
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Auto-play toggle
+    video.addEventListener('play', () => playPauseBtn.textContent = '⏸');
+    video.addEventListener('pause', () => playPauseBtn.textContent = '▶');
+  </script>
+</body>
+</html>
