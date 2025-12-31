@@ -2,62 +2,629 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>harshflix – Admin</title>
+  <title>Harshflix Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
-    body{margin:0;font-family:system-ui;background:#020617;color:#f9fafb;display:flex;justify-content:center;align-items:center;min-height:100vh}
-    .card{width:100%;max-width:480px;background:#020617;border-radius:16px;border:1px solid #111827;box-shadow:0 20px 50px rgba(15,23,42,.9);padding:1.4rem}
-    h1{margin:0 0 .4rem;font-size:1.3rem}
-    p{margin:0 0 1rem;font-size:.8rem;color:#9ca3af}
-    label{display:block;margin-bottom:.25rem;font-size:.78rem}
-    input,textarea{width:100%;border-radius:.6rem;border:1px solid #111827;background:#020617;color:#f9fafb;padding:.45rem .6rem;font-size:.8rem;outline:none}
-    input:focus,textarea:focus{border-color:#f97316;box-shadow:0 0 0 1px rgba(248,113,113,.5)}
-    .field{margin-bottom:.7rem}
-    button{border-radius:999px;border:none;padding:.45rem 1.4rem;font-size:.85rem;cursor:pointer}
-    .btn-primary{background:linear-gradient(135deg,#f97316,#e11d48);color:#fff;box-shadow:0 10px 30px rgba(239,68,68,.6)}
-    .status{margin-top:.6rem;font-size:.78rem;color:#9ca3af}
-    .status strong{color:#bbf7d0}
+    :root {
+      --bg: #020617;
+      --panel: #020617;
+      --panel-soft: #0b1220;
+      --accent: #e50914;
+      --accent-soft: rgba(239, 68, 68, 0.1);
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --border: #1e293b;
+      --radius-lg: 1rem;
+      --transition-fast: 0.18s ease;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #020617, #000);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1200px;
+      background: radial-gradient(circle at 0 0, #111827, #020617 45%);
+      border-radius: 1.4rem;
+      border: 1px solid #111827;
+      box-shadow: 0 28px 80px rgba(15, 23, 42, 1);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: radial-gradient(circle at 0 0, #020617, #020617 30%, #000 100%);
+      border-right: 1px solid #111827;
+      padding: 1.6rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .brand-pill {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 20% 20%, #f97316, #e11d48 45%, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 0 35px rgba(248, 113, 113, 0.5);
+    }
+
+    .brand-text { display: flex; flex-direction: column; }
+
+    .brand-text span:first-child { font-weight: 600; }
+
+    .brand-text span:last-child {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .nav-group-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.55rem 0.7rem;
+      border-radius: 0.6rem;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .nav-item span:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .nav-item small {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .nav-item.active {
+      background: radial-gradient(circle at 0 0, rgba(248, 113, 113, 0.25), transparent 55%);
+      color: #fef2f2;
+    }
+
+    .nav-item:hover { background: #020617; }
+
+    .nav-foot {
+      margin-top: auto;
+      padding-top: 0.7rem;
+      border-top: 1px dashed #111827;
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: #020617;
+      border: 1px solid #111827;
+      font-size: 0.7rem;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    .main {
+      padding: 1.6rem 1.6rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      background: radial-gradient(circle at 100% 0, rgba(59,130,246,0.18), transparent 55%);
+    }
+
+    .main-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .main-head h1 { font-size: 1.2rem; }
+
+    .main-head p {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .head-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 0.4rem 0.95rem;
+      font-size: 0.8rem;
+      border: 1px solid transparent;
+      background: #020617;
+      color: var(--text);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-outline {
+      border-color: #111827;
+      color: var(--muted);
+    }
+
+    .btn-outline:hover {
+      color: #e5e7eb;
+      border-color: #1f2937;
+      background: #020617;
+    }
+
+    .btn-primary {
+      background: radial-gradient(circle at 0 0, #f97316, #e11d48 50%, #6366f1);
+      border: none;
+      box-shadow: 0 10px 30px rgba(239, 68, 68, 0.6);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .panel {
+      background: linear-gradient(135deg, #020617, #020617);
+      border-radius: var(--radius-lg);
+      border: 1px solid #111827;
+      padding: 1rem 1.1rem 1.1rem;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+    }
+
+    .panel h2 { font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .panel small { color: var(--muted); font-size: 0.75rem; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.65rem;
+      margin-top: 0.9rem;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 0.18rem; }
+
+    label {
+      font-size: 0.78rem;
+      color: #e5e7eb;
+    }
+
+    input, select, textarea {
+      background: #020617;
+      border-radius: 0.55rem;
+      border: 1px solid #111827;
+      padding: 0.45rem 0.55rem;
+      font-size: 0.8rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.5);
+    }
+
+    textarea { min-height: 60px; resize: vertical; }
+
+    .field-inline {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    .hint { font-size: 0.7rem; color: var(--muted); }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.35rem;
+    }
+
+    .chip {
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      border: 1px solid #111827;
+      background: #020617;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .chip:hover {
+      border-color: #f97316;
+      color: #e5e7eb;
+    }
+
+    .chip.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: #fecaca;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
+    }
+
+    .status-text {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .status-text span {
+      color: #f97316;
+      font-weight: 500;
+    }
+
+    .table-wrap {
+      margin-top: 0.7rem;
+      border-radius: 0.8rem;
+      border: 1px solid #111827;
+      overflow: hidden;
+      background: #020617;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+
+    thead {
+      background: radial-gradient(circle at 0 0, rgba(248,113,113,0.18), #020617);
+    }
+
+    th, td {
+      padding: 0.55rem 0.6rem;
+      border-bottom: 1px solid #111827;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      font-weight: 500;
+      color: #e5e7eb;
+      font-size: 0.75rem;
+    }
+
+    td {
+      color: #d1d5db;
+      font-size: 0.76rem;
+    }
+
+    tbody tr:nth-child(even) { background: #020617; }
+    tbody tr:hover { background: #020617; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      background: rgba(34, 197, 94, 0.09);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.4);
+    }
+
+    .tag-red {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #fecaca;
+    }
+
+    .cell-actions {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid #111827;
+      background: #020617;
+      cursor: pointer;
+      font-size: 0.65rem;
+      color: var(--muted);
+      transition: all var(--transition-fast);
+    }
+
+    .badge:hover {
+      border-color: #f97316;
+      color: #fecaca;
+    }
+
+    .meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.35rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-count strong { color: #e5e7eb; }
+
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .sidebar {
+        border-right: none;
+        border-bottom: 1px solid #111827;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-group-title, .nav-foot { display: none; }
+      .nav-list { flex-direction: row; }
+    }
+
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 1rem 0.5rem; }
+      .shell { border-radius: 0.8rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>harshflix – Add video</h1>
-    <p>Paste title and Google Drive link; it will appear on the main harshflix site.</p>
-
-    <form id="videoForm">
-      <div class="field">
-        <label for="title">Title</label>
-        <input id="title" required placeholder="My Movie Name" />
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-pill">H</div>
+        <div class="brand-text">
+          <span>Harshflix</span>
+          <span>Admin panel</span>
+        </div>
       </div>
 
-      <div class="field">
-        <label for="driveLink">Google Drive link</label>
-        <input id="driveLink" required placeholder="https://drive.google.com/file/d/VIDEO_ID/view" />
+      <div>
+        <div class="nav-group-title">Navigation</div>
+        <nav class="nav-list">
+          <div class="nav-item active">
+            <span>📺 Catalog</span>
+            <small>Videos</small>
+          </div>
+          <div class="nav-item">
+            <span>👥 Users</span>
+            <small>Soon</small>
+          </div>
+          <div class="nav-item">
+            <span>📊 Analytics</span>
+            <small>Soon</small>
+          </div>
+        </nav>
       </div>
 
-      <div class="field">
-        <label for="description">Short description (optional)</label>
-        <textarea id="description" rows="2" placeholder="Short one‑liner about this video"></textarea>
+      <div class="nav-foot">
+        <span class="status-pill">
+          <span class="status-dot"></span>
+          Firestore connected
+        </span>
+        <span>Signed in as <strong>admin@harshflix.app</strong></span>
       </div>
+    </aside>
 
-      <button class="btn-primary" type="submit">Save video</button>
-    </form>
+    <main class="main">
+      <header class="main-head">
+        <div>
+          <h1>Manage catalog</h1>
+          <p>Add, preview and keep track of titles available on Harshflix.</p>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-outline" id="exportBtn">Export JSON</button>
+          <button class="btn btn-primary" id="quickAddBtn">Quick add</button>
+        </div>
+      </header>
 
-    <div class="status" id="statusText">Status: <strong>idle</strong></div>
+      <section class="grid">
+        <section class="panel">
+          <h2>New title</h2>
+          <small>Fill in basic metadata to add a movie or series.</small>
+
+          <form id="videoForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="title">Title</label>
+                <input id="title" name="title" placeholder="Midnight Echo" required />
+              </div>
+
+              <div class="field">
+                <label for="type">Type</label>
+                <select id="type" name="type">
+                  <option value="Movie">Movie</option>
+                  <option value="Series">Series</option>
+                </select>
+              </div>
+
+              <div class="field field-inline">
+                <div class="field">
+                  <label for="genre">Genre</label>
+                  <input id="genre" name="genre" placeholder="Sci‑Fi, Thriller" />
+                </div>
+                <div class="field">
+                  <label for="age">Age rating</label>
+                  <input id="age" name="age" placeholder="13+" />
+                </div>
+              </div>
+
+              <div class="field field-inline">
+                <div class="field">
+                  <label for="duration">Duration / Season</label>
+                  <input id="duration" name="duration" placeholder="2h 01m or S1" />
+                </div>
+                <div class="field">
+                  <label for="rating">Rating</label>
+                  <input id="rating" name="rating" placeholder="8.7" type="number" step="0.1" min="0" max="10" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="thumbnail">Thumbnail URL</label>
+                <input id="thumbnail" name="thumbnail" placeholder="https://…" />
+                <span class="hint">Optional. Used in cards on the main site.</span>
+              </div>
+
+              <div class="field">
+                <label for="source">Video source URL</label>
+                <input id="source" name="source" placeholder="https://cdn.example.com/midnight-echo.mp4" />
+                <span class="hint">Backend can use this for playback.</span>
+              </div>
+
+              <div class="field">
+                <label for="description">Short description</label>
+                <textarea id="description" name="description" placeholder="Short one‑liner about this title"></textarea>
+              </div>
+
+              <div class="field">
+                <label>Tags</label>
+                <div class="chip-row" id="tagsRow">
+                  <button type="button" class="chip">Original</button>
+                  <button type="button" class="chip">Trending</button>
+                  <button type="button" class="chip">New</button>
+                  <button type="button" class="chip">Top 10</button>
+                </div>
+                <span class="hint">Click to toggle tags. They are stored as an array.</span>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <div class="status-text" id="formStatus">Ready to add titles.</div>
+              <div style="display:flex; gap:0.6rem;">
+                <button type="reset" class="btn btn-outline" id="clearBtn">Clear</button>
+                <button type="submit" class="btn btn-primary">Add title</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h2>Current titles</h2>
+          <small>These entries are stored in Firestore and shown on the Harshflix main site.</small>
+
+          <div class="table-wrap">
+            <table id="videoTable">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Genre</th>
+                  <th>Age</th>
+                  <th>Meta</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- rows are filled from Firestore -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="meta-bar">
+            <span class="meta-count">
+              Showing <strong id="rowCount">0</strong> title(s)
+            </span>
+            <span id="liveInfo">
+              Realtime sync with Firestore collection <strong>"titles"</strong>.
+            </span>
+          </div>
+        </section>
+      </section>
+    </main>
   </div>
 
-  <!-- Firebase (v9+) via CDN -->
+  <!-- Firebase v9+ (modular) via CDN -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
     import {
       getFirestore,
       collection,
       addDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+      deleteDoc,
+      doc,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    // your config
     const firebaseConfig = {
       apiKey: "AIzaSyCWHM-Uh4SOuhmYEz35c3nKpsapJYwl1pE",
       authDomain: "streamingsite-85113.firebaseapp.com",
@@ -68,44 +635,176 @@
       measurementId: "G-CCS3XZ79EW"
     };
 
-    const app = initializeApp(firebaseConfig); // [web:21]
-    getAnalytics(app);                         // [web:21]
-    const db = getFirestore(app);             // [web:31]
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const db = getFirestore(app);
 
+    // UI references
     const form = document.getElementById("videoForm");
-    const statusText = document.getElementById("statusText");
+    const tagsRow = document.getElementById("tagsRow");
+    const tableBody = document.querySelector("#videoTable tbody");
+    const rowCountSpan = document.getElementById("rowCount");
+    const formStatus = document.getElementById("formStatus");
+    const quickAddBtn = document.getElementById("quickAddBtn");
+    const exportBtn = document.getElementById("exportBtn");
 
-    // helper: convert /view link to /preview for iframe
-    function toPreviewUrl(url) {
-      // drive format: https://drive.google.com/file/d/ID/view  → /preview [web:30][web:39]
-      return url.replace("/view", "/preview");
+    // Toggle tag chips
+    tagsRow.querySelectorAll(".chip").forEach(chip => {
+      chip.addEventListener("click", () => chip.classList.toggle("active"));
+    });
+
+    // Quick fill example
+    quickAddBtn.addEventListener("click", () => {
+      document.getElementById("title").value = "Neon Horizons";
+      document.getElementById("type").value = "Series";
+      document.getElementById("genre").value = "Action, Sci‑Fi";
+      document.getElementById("age").value = "16+";
+      document.getElementById("duration").value = "S3";
+      document.getElementById("rating").value = "8.7";
+      formStatus.textContent = "Quick template loaded. Adjust details and click Add title.";
+    });
+
+    // Export JSON (simple client-side export)
+    exportBtn.addEventListener("click", async () => {
+      const titlesRef = collection(db, "titles");
+      const all = [];
+      // onSnapshot is realtime; here we just read current HTML table
+      tableBody.querySelectorAll("tr").forEach(tr => {
+        const cells = tr.querySelectorAll("td");
+        if (!cells.length) return;
+        all.push({
+          title: cells[0].textContent,
+          type: cells[1].textContent,
+          genre: cells[2].textContent,
+          age: cells[3].textContent,
+          meta: cells[4].textContent,
+          status: cells[5].textContent
+        });
+      });
+
+      const blob = new Blob([JSON.stringify(all, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "harshflix-titles.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    function setStatus(msg, isError = false) {
+      formStatus.textContent = msg;
+      formStatus.style.color = isError ? "#fecaca" : "#9ca3af";
     }
 
-    form.addEventListener("submit", async (e) => {
+    function getSelectedTags() {
+      return Array.from(tagsRow.querySelectorAll(".chip.active")).map(c => c.textContent.trim());
+    }
+
+    async function handleSubmit(e) {
       e.preventDefault();
-      const title = document.getElementById("title").value.trim();
-      const driveLink = document.getElementById("driveLink").value.trim();
+      setStatus("Adding title to Firestore…");
+
+      const title = document.getElementById("title").value.trim() || "Untitled";
+      const type = document.getElementById("type").value || "Movie";
+      const genre = document.getElementById("genre").value.trim();
+      const age = document.getElementById("age").value.trim();
+      const duration = document.getElementById("duration").value.trim();
+      const ratingStr = document.getElementById("rating").value.trim();
+      const thumbnail = document.getElementById("thumbnail").value.trim();
+      const source = document.getElementById("source").value.trim();
       const description = document.getElementById("description").value.trim();
+      const tags = getSelectedTags();
 
-      if (!title || !driveLink) return;
+      const rating = ratingStr ? Number(ratingStr) : null;
 
-      statusText.innerHTML = 'Status: <strong>saving…</strong>';
+      const docData = {
+        title,
+        type,
+        genre,
+        age,
+        duration,
+        rating,
+        thumbnail,
+        source,
+        description,
+        tags,
+        createdAt: Date.now()
+      };
 
       try {
-        await addDoc(collection(db, "videos"), {
-          title,
-          driveLink,
-          previewUrl: toPreviewUrl(driveLink),
-          description,
-          createdAt: serverTimestamp()
-        }); // [web:31]
-
-        statusText.innerHTML = 'Status: <strong>saved ✔</strong>';
+        await addDoc(collection(db, "titles"), docData);
+        setStatus("Title added and synced to Harshflix.");
         form.reset();
+        tagsRow.querySelectorAll(".chip.active").forEach(chip => chip.classList.remove("active"));
       } catch (err) {
         console.error(err);
-        statusText.innerHTML = 'Status: <strong style="color:#fecaca;">error saving</strong>';
+        setStatus("Failed to add title. Check console for details.", true);
       }
+    }
+
+    form.addEventListener("submit", handleSubmit);
+
+    // Firestore -> table realtime
+    function updateRowCount() {
+      rowCountSpan.textContent = tableBody.rows.length.toString();
+    }
+
+    function createStatusTag(tags) {
+      const published = tags.includes("New") || tags.includes("Trending") || tags.includes("Top 10");
+      return published
+        ? '<span class="tag">Published</span>'
+        : '<span class="tag tag-red">Draft</span>';
+    }
+
+    function attachRowHandlers(tr, id) {
+      const removeBtn = tr.querySelector(".badge[title='Remove']");
+      if (removeBtn) {
+        removeBtn.addEventListener("click", async () => {
+          try {
+            await deleteDoc(doc(db, "titles", id));
+          } catch (err) {
+            console.error(err);
+            setStatus("Failed to delete. Check console.", true);
+          }
+        });
+      }
+    }
+
+    const titlesRef = collection(db, "titles");
+    onSnapshot(titlesRef, snapshot => {
+      tableBody.innerHTML = "";
+      snapshot.forEach(d => {
+        const data = d.data();
+        const title = data.title || "Untitled";
+        const type = data.type || "Movie";
+        const genre = data.genre || "—";
+        const age = data.age || "—";
+        const duration = data.duration || (type === "Series" ? "S1" : "—");
+        const rating = typeof data.rating === "number" ? data.rating.toFixed(1) : "";
+        const tags = Array.isArray(data.tags) ? data.tags : [];
+
+        const meta = rating ? `${duration} • ${rating} ★` : duration;
+        const statusTagHtml = createStatusTag(tags);
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${title}</td>
+          <td>${type}</td>
+          <td>${genre}</td>
+          <td>${age}</td>
+          <td>${meta}</td>
+          <td>${statusTagHtml}</td>
+          <td class="cell-actions">
+            <button class="badge" title="Preview">▶</button>
+            <button class="badge" title="Remove">✕</button>
+          </td>
+        `;
+
+        tableBody.appendChild(tr);
+        attachRowHandlers(tr, d.id);
+      });
+      updateRowCount();
+      setStatus("Realtime sync active. Add, remove or edit titles via Firestore.");
     });
   </script>
 </body>
