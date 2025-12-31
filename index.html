@@ -33,7 +33,7 @@
 
     a { color: inherit; text-decoration: none; }
 
-    /* Modal Overlay */
+    /* VIDEO MODAL - NEW */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -42,7 +42,7 @@
       z-index: 1000;
       opacity: 0;
       visibility: hidden;
-      transition: all var(--transition-fast);
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -112,9 +112,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       cursor: pointer;
       transition: all var(--transition-fast);
+      color: #e5e7eb;
     }
 
     .modal-close:hover {
@@ -151,6 +152,7 @@
       font-weight: 700;
       margin-bottom: 0.8rem;
       line-height: 1.1;
+      color: var(--text-main);
     }
 
     .modal-meta-row {
@@ -242,7 +244,6 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.75rem;
-      margin-bottom: 1.5rem;
     }
 
     .tag-chip {
@@ -254,7 +255,7 @@
       color: #e5e7eb;
     }
 
-    /* Rest of existing styles (nav, hero, cards, etc.) - UNCHANGED */
+    /* ALL ORIGINAL STYLES - UNCHANGED */
     .nav {
       position: sticky;
       top: 0;
@@ -368,7 +369,6 @@
       box-shadow: 0 18px 45px rgba(239, 68, 68, 0.55);
     }
 
-    /* Hero, sections, cards - SAME AS BEFORE */
     .hero {
       max-width: 1280px;
       margin: 0 auto;
@@ -416,7 +416,6 @@
       color: transparent;
     }
 
-    /* ... rest of hero styles same as before ... */
     .hero-subtitle {
       color: var(--text-muted);
       max-width: 32rem;
@@ -433,7 +432,104 @@
       margin-bottom: 1.5rem;
     }
 
-    /* Movie cards with click handler */
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.85);
+    }
+
+    .hero-highlight { color: #e5e7eb; font-weight: 500; }
+
+    .hero-right { position: relative; }
+
+    .glass-card {
+      position: relative;
+      border-radius: 1.5rem;
+      padding: 1.1rem;
+      background: radial-gradient(circle at top left, rgba(248,250,252,0.12), rgba(15,23,42,0.9));
+      box-shadow: 0 25px 70px rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .card-banner {
+      border-radius: 1rem;
+      background: linear-gradient(135deg, #020617, #111827);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      height: 170px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-gradient-orbit {
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(248,113,113,0.45), transparent 60%),
+        radial-gradient(circle at 90% 0, rgba(96,165,250,0.4), transparent 55%),
+        radial-gradient(circle at 0 100%, rgba(52,211,153,0.4), transparent 50%);
+      mix-blend-mode: screen;
+      opacity: 0.9;
+    }
+
+    .section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 3.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+    }
+
+    .section-title { font-size: 1.1rem; }
+
+    .section-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .section-title span {
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-right: 0.5rem;
+    }
+
+    .scroll-row { position: relative; }
+
+    .cards-row {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+    }
+
+    .cards-row::-webkit-scrollbar { display: none; }
+
     .movie-card {
       position: relative;
       flex: 0 0 180px;
@@ -563,17 +659,71 @@
       box-shadow: 0 0 8px rgba(250, 204, 21, 0.7);
     }
 
-    /* Responsive */
+    .scroll-fade {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .scroll-fade::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 80px;
+      height: 100%;
+      background: linear-gradient(to left, #020617, transparent);
+    }
+
+    .footer {
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 1.5rem 1.5rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color var(--transition-fast);
+    }
+
+    .footer-links a:hover { color: var(--text-main); }
+
+    /* Responsive - ORIGINAL */
     @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding-top: 3rem;
+      }
+      .hero-right { order: -1; }
+      .nav-links { display: none; }
       .modal-header { height: 400px; }
       .modal-body { padding: 2rem 1.5rem 1.5rem; }
       .modal-title { font-size: 1.8rem; }
-      .hero { grid-template-columns: minmax(0, 1fr); padding-top: 3rem; }
-      .hero-right { order: -1; }
-      .nav-links { display: none; }
     }
 
     @media (max-width: 600px) {
+      .hero { padding: 3rem 1.1rem 1.5rem; }
+      .section { padding: 1rem 1.1rem 3rem; }
+      .nav-inner { padding-inline: 1.1rem; }
+      .movie-card { flex: 0 0 150px; }
       .modal-content { margin: 1rem; max-height: 95vh; }
       .modal-header { height: 300px; }
       .modal-buttons { flex-direction: column; }
@@ -582,13 +732,16 @@
   </style>
 </head>
 <body>
-  <!-- Navigation (same) -->
+  <!-- ORIGINAL NAV - UNCHANGED -->
   <header class="nav">
     <div class="nav-inner">
       <div class="brand">
-        <div class="logo-pill"><span>H</span></div>
+        <div class="logo-pill">
+          <span>H</span>
+        </div>
         <div class="brand-text">Harshflix</div>
       </div>
+
       <nav class="nav-links">
         <span class="nav-link">Home</span>
         <span class="nav-link">Series</span>
@@ -596,6 +749,7 @@
         <span class="nav-link">New & Popular</span>
         <span class="nav-link">My List</span>
       </nav>
+
       <div class="nav-actions">
         <button class="btn btn-outline">Sign In</button>
         <button class="btn btn-primary">Get Started</button>
@@ -603,19 +757,24 @@
     </div>
   </header>
 
+  <!-- ORIGINAL HERO - UNCHANGED -->
   <main>
-    <!-- Hero (same static content) -->
     <section class="hero">
       <div class="hero-left">
         <div class="hero-badge">
           <div class="hero-badge-pill">4K</div>
           <span>Binge-worthy stories, zero ads</span>
         </div>
-        <h1 class="hero-title">Stream the <span>stories</span> everyone is talking about.</h1>
+
+        <h1 class="hero-title">
+          Stream the <span>stories</span> everyone is talking about.
+        </h1>
+
         <p class="hero-subtitle">
           From blockbuster movies to addictive series and originals, Harshflix brings a cinematic experience
           to every screen at home or on the go.
         </p>
+
         <div class="hero-cta">
           <button class="btn btn-primary" style="padding-inline: 1.6rem; font-size: 0.95rem;">
             Start free trial
@@ -624,51 +783,114 @@
             Explore plans
           </button>
         </div>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <div class="dot"></div>
+            <span class="hero-highlight">New:</span>
+            <span>Fresh episodes every Friday</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-highlight">1000+ titles</span>
+            <span class="hero-highlight" style="color:#22c55e;"> •</span>
+            <span>Cancel anytime</span>
+          </div>
+        </div>
       </div>
+
+      <!-- ORIGINAL Hero Right Card - UNCHANGED -->
       <div class="hero-right">
-        <!-- Static hero card -->
         <div class="glass-card">
           <div class="card-banner">
             <div class="card-gradient-orbit"></div>
             <div class="card-floating-title">
               <div>
-                <h3>Featured</h3>
+                <h3>Midnight Echo</h3>
                 <p style="font-size:0.75rem; color:#e5e7eb; margin-top:0.25rem;">
-                  Handpicked originals and trending titles
+                  A detective trapped in a time loop has 24 hours to rewrite the end of the world.
                 </p>
               </div>
+              <div class="card-meta-bottom">
+                <span>
+                  <span class="pill-rating">
+                    <span>★</span>
+                    <span>9.1</span>
+                  </span>
+                  <span style="opacity:0.8;">Sci‑Fi • Thriller</span>
+                </span>
+                <span>Season 2 • New episodes</span>
+              </div>
             </div>
+          </div>
+
+          <div class="card-controls">
+            <div class="card-controls-left">
+              <button class="control-btn" title="Play">▶</button>
+              <button class="control-btn" title="Add to My List">+</button>
+              <button class="control-btn" title="More Info">ⓘ</button>
+            </div>
+            <div class="card-controls-right">
+              <div class="tiny-label">Continue watching</div>
+              <div class="progress-track">
+                <div class="progress-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="floating-pill">
+            <div class="pill-dot"></div>
+            <span class="pill-muted">Live now</span>
+            <span class="pill-strong">Premiere marathon</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Trending -->
+    <!-- ORIGINAL Trending Section -->
     <section class="section">
       <div class="section-header">
         <h2 class="section-title"><span>Trending</span> Now</h2>
-        <p class="section-subtitle">Top picks from your Harshflix catalog</p>
+        <p class="section-subtitle">Top picks powered by what viewers are watching worldwide</p>
       </div>
+
       <div class="scroll-row">
-        <div class="cards-row" id="trending-row"></div>
+        <div class="cards-row" id="trending-row">
+          <!-- Filled by Firestore -->
+        </div>
         <div class="scroll-fade"></div>
       </div>
     </section>
 
-    <!-- Series -->
+    <!-- ORIGINAL Continue Watching -->
     <section class="section">
       <div class="section-header">
-        <h2 class="section-title"><span>Series</span></h2>
-        <p class="section-subtitle">Continue watching or discover new series</p>
+        <h2 class="section-title"><span>Continue</span> Watching</h2>
+        <p class="section-subtitle">Jump back into what you were watching in seconds</p>
       </div>
+
       <div class="scroll-row">
-        <div class="cards-row" id="series-row"></div>
+        <div class="cards-row" id="series-row">
+          <!-- Filled by Firestore -->
+        </div>
         <div class="scroll-fade"></div>
       </div>
     </section>
   </main>
 
-  <!-- VIDEO DETAIL MODAL -->
+  <!-- ORIGINAL Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>© 2025 Harshflix. All rights reserved.</span>
+      <div class="footer-links">
+        <a>Terms</a>
+        <a>Privacy</a>
+        <a>Help Center</a>
+        <a>Cookie preferences</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- NEW VIDEO MODAL -->
   <div class="modal-overlay" id="videoModal">
     <div class="modal-content">
       <div class="modal-header" id="modalHeader">
@@ -696,14 +918,13 @@
     </div>
   </div>
 
-  <!-- Firebase -->
+  <!-- Firebase + Modal Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
     import {
       getFirestore,
       collection,
       onSnapshot,
-      query,
       doc,
       getDoc
     } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
@@ -721,7 +942,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Modal elements
+    // Modal controls
     const modal = document.getElementById('videoModal');
     const modalClose = document.getElementById('modalClose');
     const modalTitle = document.getElementById('modalTitle');
@@ -731,7 +952,6 @@
     const modalBadges = document.getElementById('modalBadges');
     const modalTags = document.getElementById('modalTags');
 
-    // Close modal
     function closeModal() {
       modal.classList.remove('active');
     }
@@ -741,12 +961,10 @@
       if (e.target === modal) closeModal();
     });
 
-    // Show modal with video data
     async function showVideoModal(videoData) {
       modalTitle.textContent = videoData.title || 'Untitled';
       modalDescription.textContent = videoData.description || 'No description available.';
       
-      // Meta
       const rating = videoData.rating ? `${videoData.rating.toFixed(1)}★` : '—';
       modalMeta.innerHTML = `
         <div class="meta-group">
@@ -761,12 +979,10 @@
         </div>
       `;
 
-      // Poster
       modalPoster.style.backgroundImage = videoData.thumbnail 
         ? `url(${videoData.thumbnail})` 
         : 'linear-gradient(135deg, #020617, #0f172a)';
 
-      // Tags
       const tags = Array.isArray(videoData.tags) ? videoData.tags : [];
       modalBadges.innerHTML = tags.map(tag => 
         `<div class="modal-badge">${tag}</div>`
@@ -779,16 +995,17 @@
       modal.classList.add('active');
     }
 
-    // Create movie card with click handler
+    // Create clickable card
     function createCard(doc) {
       const data = doc.data();
       const card = document.createElement('article');
       card.className = 'movie-card';
-      card.dataset.videoId = doc.id; // Store Firestore ID
+      card.dataset.videoId = doc.id;
 
-      const badgeText = (Array.isArray(data.tags) ? data.tags : []).find(t => 
-        ['Original', 'Trending', 'Top 10', 'New'].includes(t)
-      ) || data.type || 'Movie';
+      const badgeText =
+        (Array.isArray(data.tags) ? data.tags : []).find(t => 
+          ['Original', 'Trending', 'Top 10', 'New'].includes(t)
+        ) || data.type || 'Movie';
 
       card.innerHTML = `
         <div class="movie-thumb">
@@ -810,7 +1027,7 @@
         </div>
       `;
 
-      // Click to show modal
+      // CLICK = OPEN MODAL
       card.addEventListener('click', async () => {
         try {
           const videoDoc = await getDoc(doc(db, 'titles', doc.id));
@@ -825,36 +1042,36 @@
       return card;
     }
 
-    // Render rows from Firestore
-    const trendingRow = document.getElementById('trending-row');
-    const seriesRow = document.getElementById('series-row');
+    // ORIGINAL render logic
+    const trendingRow = document.getElementById("trending-row");
+    const seriesRow = document.getElementById("series-row");
 
     function renderRows(snapshot) {
-      trendingRow.innerHTML = '';
-      seriesRow.innerHTML = '';
+      trendingRow.innerHTML = "";
+      seriesRow.innerHTML = "";
 
       snapshot.forEach(doc => {
         const data = doc.data();
         const tags = Array.isArray(data.tags) ? data.tags : [];
         const card = createCard(doc);
 
-        if (tags.includes('Trending') || tags.includes('Top 10')) {
+        if (tags.includes("Trending") || tags.includes("Top 10")) {
           trendingRow.appendChild(card.cloneNode(true));
         }
-        if (data.type === 'Series') {
+
+        if (data.type === "Series") {
           seriesRow.appendChild(card.cloneNode(true));
         }
       });
 
       if (!trendingRow.children.length) {
-        trendingRow.innerHTML = '<div style="color:#9ca3af; font-size:0.85rem; padding:2rem;">No trending titles yet. Add some in admin.</div>';
+        trendingRow.innerHTML = "<span style='color:#9ca3af; font-size:0.85rem;'>No trending titles yet. Add some in Harshflix admin.</span>";
       }
       if (!seriesRow.children.length) {
-        seriesRow.innerHTML = '<div style="color:#9ca3af; font-size:0.85rem; padding:2rem;">No series yet. Add in admin.</div>';
+        seriesRow.innerHTML = "<span style='color:#9ca3af; font-size:0.85rem;'>No series yet. Add titles of type 'Series' in Harshflix admin.</span>";
       }
     }
 
-    // Realtime listener
     const titlesRef = collection(db, 'titles');
     onSnapshot(titlesRef, renderRows);
   </script>
