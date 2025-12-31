@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Streamify Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: #020617;
+      --panel-soft: #0b1220;
+      --accent: #e50914;
+      --accent-soft: rgba(239, 68, 68, 0.1);
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --border: #1e293b;
+      --radius-lg: 1rem;
+      --transition-fast: 0.18s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #020617, #000);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1200px;
+      background: radial-gradient(circle at 0 0, #111827, #020617 45%);
+      border-radius: 1.4rem;
+      border: 1px solid #111827;
+      box-shadow: 0 28px 80px rgba(15, 23, 42, 1);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: radial-gradient(circle at 0 0, #020617, #020617 30%, #000 100%);
+      border-right: 1px solid #111827;
+      padding: 1.6rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .brand-pill {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 20% 20%, #f97316, #e11d48 45%, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 0 35px rgba(248, 113, 113, 0.5);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-text span:first-child {
+      font-weight: 600;
+    }
+
+    .brand-text span:last-child {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .nav-group-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.55rem 0.7rem;
+      border-radius: 0.6rem;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .nav-item span:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .nav-item small {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .nav-item.active {
+      background: radial-gradient(circle at 0 0, rgba(248, 113, 113, 0.25), transparent 55%);
+      color: #fef2f2;
+    }
+
+    .nav-item:hover {
+      background: #020617;
+    }
+
+    .nav-foot {
+      margin-top: auto;
+      padding-top: 0.7rem;
+      border-top: 1px dashed #111827;
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: #020617;
+      border: 1px solid #111827;
+      font-size: 0.7rem;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    /* Main area */
+    .main {
+      padding: 1.6rem 1.6rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      background: radial-gradient(circle at 100% 0, rgba(59,130,246,0.18), transparent 55%);
+    }
+
+    .main-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .main-head h1 {
+      font-size: 1.2rem;
+    }
+
+    .main-head p {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .head-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 0.4rem 0.95rem;
+      font-size: 0.8rem;
+      border: 1px solid transparent;
+      background: #020617;
+      color: var(--text);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-outline {
+      border-color: #111827;
+      color: var(--muted);
+    }
+
+    .btn-outline:hover {
+      color: #e5e7eb;
+      border-color: #1f2937;
+      background: #020617;
+    }
+
+    .btn-primary {
+      background: radial-gradient(circle at 0 0, #f97316, #e11d48 50%, #6366f1);
+      border: none;
+      box-shadow: 0 10px 30px rgba(239, 68, 68, 0.6);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    /* Form + table layout */
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .panel {
+      background: linear-gradient(135deg, #020617, #020617);
+      border-radius: var(--radius-lg);
+      border: 1px solid #111827;
+      padding: 1rem 1.1rem 1.1rem;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+    }
+
+    .panel h2 {
+      font-size: 0.95rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .panel small {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.65rem;
+      margin-top: 0.9rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.18rem;
+    }
+
+    label {
+      font-size: 0.78rem;
+      color: #e5e7eb;
+    }
+
+    input, select, textarea {
+      background: #020617;
+      border-radius: 0.55rem;
+      border: 1px solid #111827;
+      padding: 0.45rem 0.55rem;
+      font-size: 0.8rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.5);
+    }
+
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+
+    .field-inline {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    .hint {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.35rem;
+    }
+
+    .chip {
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      border: 1px solid #111827;
+      background: #020617;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .chip:hover {
+      border-color: #f97316;
+      color: #e5e7eb;
+    }
+
+    .chip.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: #fecaca;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
+    }
+
+    /* Table */
+    .table-wrap {
+      margin-top: 0.7rem;
+      border-radius: 0.8rem;
+      border: 1px solid #111827;
+      overflow: hidden;
+      background: #020617;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+
+    thead {
+      background: radial-gradient(circle at 0 0, rgba(248,113,113,0.18), #020617);
+    }
+
+    th, td {
+      padding: 0.55rem 0.6rem;
+      border-bottom: 1px solid #111827;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      font-weight: 500;
+      color: #e5e7eb;
+      font-size: 0.75rem;
+    }
+
+    td {
+      color: #d1d5db;
+      font-size: 0.76rem;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #020617;
+    }
+
+    tbody tr:hover {
+      background: #020617;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      background: rgba(34, 197, 94, 0.09);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.4);
+    }
+
+    .tag-red {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #fecaca;
+    }
+
+    .cell-actions {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid #111827;
+      background: #020617;
+      cursor: pointer;
+      font-size: 0.65rem;
+      color: var(--muted);
+      transition: all var(--transition-fast);
+    }
+
+    .badge:hover {
+      border-color: #f97316;
+      color: #fecaca;
+    }
+
+    .meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.35rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .meta-count strong {
+      color: #e5e7eb;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .sidebar {
+        border-right: none;
+        border-bottom: 1px solid #111827;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-group-title, .nav-foot {
+        display: none;
+      }
+      .nav-list {
+        flex-direction: row;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+      .shell {
+        border-radius: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-pill">S</div>
+        <div class="brand-text">
+          <span>Streamify</span>
+          <span>Admin panel</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="nav-group-title">Navigation</div>
+        <nav class="nav-list">
+          <div class="nav-item active">
+            <span>📺 Catalog</span>
+            <small>Videos</small>
+          </div>
+          <div class="nav-item">
+            <span>👥 Users</span>
+            <small>Soon</small>
+          </div>
+          <div class="nav-item">
+            <span>📊 Analytics</span>
+            <small>Soon</small>
+          </div>
+        </nav>
+      </div>
+
+      <div class="nav-foot">
+        <span class="status-pill">
+          <span class="status-dot"></span>
+          Ingest pipeline healthy
+        </span>
+        <span>Signed in as <strong>admin@streamify.app</strong></span>
+      </div>
+    </aside>
+
+    <!-- Main area -->
+    <main class="main">
+      <header class="main-head">
+        <div>
+          <h1>Manage catalog</h1>
+          <p>Add, preview and keep track of titles available on your platform.</p>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-outline">Export</button>
+          <button class="btn btn-primary" id="quickAddBtn">Quick add</button>
+        </div>
+      </header>
+
+      <section class="grid">
+        <!-- Add video form -->
+        <section class="panel">
+          <h2>New title</h2>
+          <small>Fill in basic metadata to add a movie or series.</small>
+
+          <form id="videoForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="title">Title</label>
+                <input id="title" name="title" placeholder="Midnight Echo" required />
+              </div>
+
+              <div class="field">
+                <label for="type">Type</label>
+                <select id="type" name="type">
+                  <option value="Movie">Movie</option>
+                  <option value="Series">Series</option>
+                </select>
+              </div>
+
+              <div class="field field-inline">
+                <div class="field">
+                  <label for="genre">Genre</label>
+                  <input id="genre" name="genre" placeholder="Sci‑Fi, Thriller" />
+                </div>
+                <div class="field">
+                  <label for="age">Age rating</label>
+                  <input id="age" name="age" placeholder="13+" />
+                </div>
+              </div>
+
+              <div class="field field-inline">
+                <div class="field">
+                  <label for="duration">Duration / Season</label>
+                  <input id="duration" name="duration" placeholder="2h 01m or S1" />
+                </div>
+                <div class="field">
+                  <label for="rating">Rating</label>
+                  <input id="rating" name="rating" placeholder="8.7" type="number" step="0.1" min="0" max="10" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="thumbnail">Thumbnail URL</label>
+                <input id="thumbnail" name="thumbnail" placeholder="https://…" />
+                <span class="hint">Optional. Used in cards on the main site.</span>
+              </div>
+
+              <div class="field">
+                <label for="source">Video source URL</label>
+                <input id="source" name="source" placeholder="https://cdn.example.com/midnight-echo.mp4" />
+                <span class="hint">Backend will use this for playback (not used on this demo page).</span>
+              </div>
+
+              <div class="field">
+                <label for="description">Short description</label>
+                <textarea id="description" name="description" placeholder="Short one‑liner about this title"></textarea>
+              </div>
+
+              <div class="field">
+                <label>Tags</label>
+                <div class="chip-row" id="tagsRow">
+                  <button type="button" class="chip">Original</button>
+                  <button type="button" class="chip">Trending</button>
+                  <button type="button" class="chip">New</button>
+                  <button type="button" class="chip">Top 10</button>
+                </div>
+                <span class="hint">Click to toggle tags. They are stored as text only.</span>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="reset" class="btn btn-outline">Clear</button>
+              <button type="submit" class="btn btn-primary">Add title</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Catalog table -->
+        <section class="panel">
+          <h2>Current titles</h2>
+          <small>These entries simulate what will be shown to users on the main app.</small>
+
+          <div class="table-wrap">
+            <table id="videoTable">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Genre</th>
+                  <th>Age</th>
+                  <th>Meta</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Seed example row -->
+                <tr>
+                  <td>Midnight Echo</td>
+                  <td>Series</td>
+                  <td>Sci‑Fi, Thriller</td>
+                  <td>16+</td>
+                  <td>S2 • 9.1 ★</td>
+                  <td><span class="tag">Published</span></td>
+                  <td class="cell-actions">
+                    <button class="badge" title="Preview">▶</button>
+                    <button class="badge" title="Remove">✕</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="meta-bar">
+            <span class="meta-count">
+              Showing <strong id="rowCount">1</strong> title(s)
+            </span>
+            <span>
+              Changes are local to this page only. Connect it to your backend to persist records.
+            </span>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Toggle tag chips
+    document.querySelectorAll("#tagsRow .chip").forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        chip.classList.toggle("active");
+      });
+    });
+
+    // Quick add button pre-fills the form
+    document.getElementById("quickAddBtn").addEventListener("click", function () {
+      document.getElementById("title").value = "Neon Horizons";
+      document.getElementById("type").value = "Series";
+      document.getElementById("genre").value = "Action, Sci‑Fi";
+      document.getElementById("age").value = "16+";
+      document.getElementById("duration").value = "S3";
+      document.getElementById("rating").value = "8.7";
+    });
+
+    // Handle form submission – add row to table
+    const form = document.getElementById("videoForm");
+    const tableBody = document.querySelector("#videoTable tbody");
+    const rowCountSpan = document.getElementById("rowCount");
+
+    function updateRowCount() {
+      rowCountSpan.textContent = tableBody.rows.length.toString();
+    }
+
+    function attachRowHandlers(row) {
+      const removeBtn = row.querySelector(".badge[title='Remove']");
+      if (removeBtn) {
+        removeBtn.addEventListener("click", function () {
+          row.remove();
+          updateRowCount();
+        });
+      }
+    }
+
+    // Attach handler to seed row
+    Array.from(tableBody.rows).forEach(attachRowHandlers);
+    updateRowCount();
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const title = document.getElementById("title").value.trim() || "Untitled";
+      const type = document.getElementById("type").value || "Movie";
+      const genre = document.getElementById("genre").value.trim() || "—";
+      const age = document.getElementById("age").value.trim() || "—";
+      const duration = document.getElementById("duration").value.trim();
+      const rating = document.getElementById("rating").value.trim();
+
+      const tags = Array.from(document.querySelectorAll("#tagsRow .chip.active")).map(function (chip) {
+        return chip.textContent.trim();
+      });
+
+      let meta = "";
+      if (type === "Series") {
+        meta = (duration || "S1") + (rating ? " • " + rating + " ★" : "");
+      } else {
+        meta = (duration || "—") + (rating ? " • " + rating + " ★" : "");
+      }
+
+      const statusTag = tags.includes("New") || tags.includes("Trending")
+        ? '<span class="tag">Published</span>'
+        : '<span class="tag tag-red">Draft</span>';
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${title}</td>
+        <td>${type}</td>
+        <td>${genre}</td>
+        <td>${age}</td>
+        <td>${meta}</td>
+        <td>${statusTag}</td>
+        <td class="cell-actions">
+          <button class="badge" title="Preview">▶</button>
+          <button class="badge" title="Remove">✕</button>
+        </td>
+      `;
+
+      tableBody.appendChild(tr);
+      attachRowHandlers(tr);
+      updateRowCount();
+      form.reset();
+      // Clear chip active states
+      document.querySelectorAll("#tagsRow .chip.active").forEach(function (chip) {
+        chip.classList.remove("active");
+      });
+    });
+  </script>
+</body>
+</html>
