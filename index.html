@@ -5,7 +5,6 @@
   <title>Harshflix - Watch Anywhere</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
@@ -13,31 +12,27 @@
       --bg-color: #050816;
       --bg-elevated: #101827;
       --accent: #e50914;
-      --accent-soft: rgba(229, 9, 20, 0.25);
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
-      --card-radius: 1rem;
+      --card-radius: 0.5rem;
       --transition-fast: 0.2s ease;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: "Poppins", system-ui, sans-serif;
       background: radial-gradient(circle at top, #111827 0, #020617 40%, #000 100%);
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    a { color: inherit; text-decoration: none; }
-
-    /* VIDEO MODAL - NEW */
+    /* POPUP MODAL */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.95);
+      background: rgba(0,0,0,0.95);
       backdrop-filter: blur(8px);
       z-index: 1000;
       opacity: 0;
@@ -56,25 +51,23 @@
 
     .modal-content {
       width: 100%;
-      max-width: 900px;
+      max-width: 800px;
       max-height: 90vh;
-      background: radial-gradient(circle at top left, rgba(248,250,252,0.08), rgba(15,23,42,0.95));
-      border-radius: 1.2rem;
-      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(15,23,42,0.98);
+      border-radius: 1rem;
+      border: 1px solid rgba(148,163,184,0.3);
       overflow: hidden;
-      transform: scale(0.9) translateY(20px);
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 35px 100px rgba(0, 0, 0, 0.8);
+      transform: scale(0.9);
+      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
     }
 
-    .modal-overlay.active .modal-content {
-      transform: scale(1) translateY(0);
-    }
+    .modal-overlay.active .modal-content { transform: scale(1); }
 
     .modal-header {
       position: relative;
-      height: 500px;
-      background: linear-gradient(135deg, #020617 0%, #111827 100%);
+      height: 45vh;
+      min-height: 300px;
+      background: linear-gradient(135deg, #1e293b 0%, #020617 100%);
       overflow: hidden;
     }
 
@@ -83,13 +76,13 @@
       inset: 0;
       background-size: cover;
       background-position: center;
-      opacity: 0.15;
+      opacity: 0.12;
     }
 
     .modal-gradient {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 50%);
+      background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.9) 60%);
     }
 
     .modal-top-controls {
@@ -104,58 +97,39 @@
     }
 
     .modal-close {
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.6);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.6);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       cursor: pointer;
-      transition: all var(--transition-fast);
+      transition: all 0.2s ease;
       color: #e5e7eb;
     }
 
     .modal-close:hover {
-      background: rgba(239, 68, 68, 0.9);
+      background: rgba(239,68,68,0.9);
       border-color: #ef4444;
-      transform: scale(1.05);
-    }
-
-    .modal-badge-row {
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .modal-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.3rem 0.8rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.8);
-      font-size: 0.8rem;
-      color: #e5e7eb;
     }
 
     .modal-body {
-      padding: 2.5rem 2.5rem 2rem;
-      max-height: calc(90vh - 500px);
+      padding: 2rem;
+      max-height: 55vh;
       overflow-y: auto;
     }
 
     .modal-title {
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 700;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
       line-height: 1.1;
-      color: var(--text-main);
     }
 
-    .modal-meta-row {
+    .modal-meta {
       display: flex;
       align-items: center;
       gap: 1.5rem;
@@ -164,79 +138,66 @@
       color: var(--text-muted);
     }
 
-    .meta-group {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .meta-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: #22c55e;
+    .meta-dot { 
+      width: 6px; 
+      height: 6px; 
+      border-radius: 50%; 
+      background: #22c55e; 
     }
 
     .modal-rating {
       display: flex;
       align-items: center;
       gap: 0.3rem;
-      padding: 0.4rem 0.9rem;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.6);
       color: #facc15;
+      font-weight: 600;
     }
 
     .modal-buttons {
       display: flex;
       gap: 1rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
     }
 
     .btn-modal {
-      padding: 0.75rem 1.5rem;
-      font-size: 0.95rem;
-      border-radius: 0.6rem;
+      flex: 1;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.5rem;
       border: none;
       cursor: pointer;
       font-weight: 500;
-      transition: all var(--transition-fast);
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 0.5rem;
+      font-size: 0.95rem;
     }
 
     .btn-play {
-      background: radial-gradient(circle at 20% 20%, #f97316, #e11d48 50%, #6366f1);
+      background: linear-gradient(135deg, #f97316, #e11d48);
       color: white;
-      box-shadow: 0 12px 35px rgba(239, 68, 68, 0.5);
-      min-width: 140px;
-      justify-content: center;
+      box-shadow: 0 8px 25px rgba(249,115,22,0.4);
     }
 
-    .btn-play:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 45px rgba(239, 68, 68, 0.7);
-    }
+    .btn-play:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(249,115,22,0.6); }
 
     .btn-add {
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: transparent;
+      border: 1px solid rgba(148,163,184,0.6);
       color: var(--text-main);
     }
 
-    .btn-add:hover {
-      background: rgba(15, 23, 42, 1);
-      border-color: #e5e7eb;
-    }
+    .btn-add:hover { background: rgba(15,23,42,0.8); }
 
     .modal-description {
       color: #e5e7eb;
       line-height: 1.6;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       font-size: 1rem;
     }
 
@@ -248,26 +209,27 @@
 
     .tag-chip {
       padding: 0.3rem 0.8rem;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(148, 163, 184, 0.5);
+      border-radius: 20px;
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(148,163,184,0.5);
       font-size: 0.8rem;
       color: #e5e7eb;
     }
 
-    /* ALL ORIGINAL STYLES - UNCHANGED */
+    /* ORIGINAL PERFECT UI */
     .nav {
       position: sticky;
       top: 0;
       z-index: 20;
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+      background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
       backdrop-filter: blur(16px);
+      padding: 0.5rem 0;
     }
 
     .nav-inner {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 1rem 1.5rem;
+      padding: 0 1.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -287,13 +249,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 40px rgba(248, 113, 113, 0.45);
+      box-shadow: 0 0 20px rgba(248,113,113,0.4);
     }
 
-    .logo-pill span {
-      font-size: 1.2rem;
-      font-weight: 700;
-    }
+    .logo-pill span { font-size: 1.2rem; font-weight: 700; }
 
     .brand-text {
       font-weight: 600;
@@ -304,31 +263,18 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 1.25rem;
+      gap: 1.5rem;
       font-size: 0.95rem;
     }
 
     .nav-link {
-      position: relative;
       color: var(--text-muted);
       cursor: pointer;
-      transition: color var(--transition-fast);
-    }
-
-    .nav-link::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -0.3rem;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(to right, #f97316, #e11d48, #6366f1);
-      border-radius: 999px;
-      transition: width 0.24s ease;
+      transition: color 0.2s ease;
+      position: relative;
     }
 
     .nav-link:hover { color: var(--text-main); }
-    .nav-link:hover::after { width: 100%; }
 
     .nav-actions {
       display: flex;
@@ -338,43 +284,42 @@
 
     .btn {
       border-radius: 999px;
-      padding: 0.45rem 1rem;
+      padding: 0.5rem 1.2rem;
       font-size: 0.9rem;
       border: 1px solid transparent;
       cursor: pointer;
       background: transparent;
       color: var(--text-main);
-      transition: all var(--transition-fast);
+      transition: all 0.2s ease;
+      font-weight: 500;
     }
 
     .btn-outline {
-      border-color: rgba(148, 163, 184, 0.7);
+      border-color: rgba(148,163,184,0.7);
       color: var(--text-muted);
     }
 
     .btn-outline:hover {
       border-color: #e5e7eb;
-      color: var(--text-main);
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15,23,42,0.8);
     }
 
     .btn-primary {
-      background: radial-gradient(circle at 10% 20%, #f97316, #e11d48 50%, #6366f1);
-      box-shadow: 0 12px 30px rgba(239, 68, 68, 0.4);
+      background: radial-gradient(circle, #f97316, #e11d48 50%, #6366f1);
+      box-shadow: 0 8px 25px rgba(239,68,68,0.4);
     }
 
     .btn-primary:hover {
-      filter: brightness(1.05);
       transform: translateY(-1px);
-      box-shadow: 0 18px 45px rgba(239, 68, 68, 0.55);
+      box-shadow: 0 12px 35px rgba(239,68,68,0.6);
     }
 
     .hero {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 4.5rem 1.5rem 2rem;
+      padding: 4rem 1.5rem 2rem;
       display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: 3rem;
       align-items: center;
     }
@@ -383,177 +328,109 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      padding: 0.15rem 0.75rem 0.15rem 0.15rem;
+      padding: 0.2rem 0.75rem;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: radial-gradient(circle at top, rgba(56,189,248,0.25), transparent 65%);
-      margin-bottom: 1.2rem;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(56,189,248,0.15);
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
     }
 
     .hero-badge-pill {
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #a855f7, #ec4899);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #a855f7, #ec4899);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       font-weight: 600;
     }
 
-    .hero-badge span { font-size: 0.75rem; color: var(--text-muted); }
-
     .hero-title {
-      font-size: clamp(2.4rem, 4vw, 3.3rem);
-      line-height: 1.08;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      line-height: 1.1;
       margin-bottom: 1rem;
     }
 
     .hero-title span {
       background: linear-gradient(to right, #f97316, #e11d48, #6366f1);
       -webkit-background-clip: text;
-      color: transparent;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .hero-subtitle {
       color: var(--text-muted);
-      max-width: 32rem;
-      font-size: 0.98rem;
+      font-size: 1rem;
       line-height: 1.6;
+      max-width: 28rem;
       margin-bottom: 1.5rem;
     }
 
     .hero-cta {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.85rem;
+      gap: 1rem;
       margin-bottom: 1.5rem;
     }
 
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.25rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .hero-meta-item {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 12px rgba(34, 197, 94, 0.85);
-    }
-
-    .hero-highlight { color: #e5e7eb; font-weight: 500; }
-
-    .hero-right { position: relative; }
-
     .glass-card {
-      position: relative;
-      border-radius: 1.5rem;
-      padding: 1.1rem;
-      background: radial-gradient(circle at top left, rgba(248,250,252,0.12), rgba(15,23,42,0.9));
-      box-shadow: 0 25px 70px rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .card-banner {
       border-radius: 1rem;
-      background: linear-gradient(135deg, #020617, #111827);
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      height: 170px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-gradient-orbit {
-      position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at 0 0, rgba(248,113,113,0.45), transparent 60%),
-        radial-gradient(circle at 90% 0, rgba(96,165,250,0.4), transparent 55%),
-        radial-gradient(circle at 0 100%, rgba(52,211,153,0.4), transparent 50%);
-      mix-blend-mode: screen;
-      opacity: 0.9;
+      padding: 1.5rem;
+      background: radial-gradient(circle at top left, rgba(248,250,252,0.1), rgba(15,23,42,0.95));
+      border: 1px solid rgba(148,163,184,0.3);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.8);
     }
 
     .section {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 1rem 1.5rem 3.5rem;
+      padding: 2rem 1.5rem;
     }
 
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 0.7rem;
+    .section-header h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
     }
-
-    .section-title { font-size: 1.1rem; }
 
     .section-subtitle {
-      font-size: 0.8rem;
       color: var(--text-muted);
+      font-size: 0.85rem;
     }
-
-    .section-title span {
-      font-size: 0.75rem;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      margin-right: 0.5rem;
-    }
-
-    .scroll-row { position: relative; }
 
     .cards-row {
       display: flex;
       gap: 1rem;
       overflow-x: auto;
-      padding-bottom: 0.5rem;
-      scroll-behavior: smooth;
+      padding-bottom: 1rem;
       scrollbar-width: none;
     }
 
     .cards-row::-webkit-scrollbar { display: none; }
 
+    /* FIXED PERFECT NETFLIX CARDS */
     .movie-card {
-      position: relative;
-      flex: 0 0 180px;
+      flex: 0 0 200px;
+      height: 280px;
       border-radius: var(--card-radius);
-      background: radial-gradient(circle at top, #1f2937, #020617);
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      padding: 0.7rem;
-      cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border: 2px solid transparent;
       overflow: hidden;
-      isolation: isolate;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
     }
 
     .movie-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
-      border-color: rgba(148, 163, 184, 0.9);
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(148,163,184,0.6);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
     }
 
     .movie-thumb {
-      border-radius: 0.75rem;
-      background: linear-gradient(135deg, #020617, #0f172a);
-      height: 140px;
-      margin-bottom: 0.55rem;
+      height: 70%;
+      background: linear-gradient(135deg, #374151, #1f2937);
       position: relative;
       overflow: hidden;
     }
@@ -562,31 +439,29 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
-      opacity: 0.9;
     }
 
     .thumb-overlay {
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(circle at 20% 0, rgba(248,113,113,0.4), transparent 65%),
-        radial-gradient(circle at 90% 90%, rgba(59,130,246,0.4), transparent 60%);
-      opacity: 0.85;
-      mix-blend-mode: screen;
+      background: linear-gradient(45deg, rgba(249,115,22,0.3), rgba(236,72,153,0.2));
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
+
+    .movie-card:hover .thumb-overlay { opacity: 1; }
 
     .thumb-badge {
       position: absolute;
-      top: 0.5rem;
-      left: 0.5rem;
-      padding: 0.15rem 0.55rem;
-      border-radius: 999px;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.9);
+      top: 0.75rem;
+      left: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(148,163,184,0.8);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: white;
     }
 
     .thumb-play {
@@ -596,160 +471,106 @@
       align-items: center;
       justify-content: center;
       opacity: 0;
-      transition: opacity var(--transition-fast);
-    }
-
-    .thumb-play-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 999px;
-      border: 1px solid rgba(209, 213, 219, 0.95);
-      background: rgba(15, 23, 42, 0.95);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.95);
-    }
-
-    .thumb-play-icon span {
-      margin-left: 2px;
-      font-size: 1.2rem;
+      transition: opacity 0.3s ease;
     }
 
     .movie-card:hover .thumb-play { opacity: 1; }
 
-    .movie-meta-top {
+    .thumb-play-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-bottom: 0.15rem;
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
     }
 
-    .pill-age {
-      border-radius: 999px;
-      padding: 0.1rem 0.36rem;
-      border: 1px solid rgba(148, 163, 184, 0.8);
-      font-size: 0.65rem;
+    .thumb-play-icon span {
+      font-size: 1.3rem;
+      margin-left: 2px;
+      color: #1f2937;
+      font-weight: 700;
+    }
+
+    .movie-info {
+      padding: 0.75rem 0.75rem 1rem;
+      height: 30%;
+      display: flex;
+      flex-direction: column;
     }
 
     .movie-title {
       font-size: 0.9rem;
-      margin-bottom: 0.1rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      line-height: 1.2;
+      color: var(--text-main);
     }
 
-    .movie-extra {
-      font-size: 0.72rem;
+    .movie-meta {
+      font-size: 0.75rem;
       color: var(--text-muted);
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 0.3rem;
+      align-items: center;
+    }
+
+    .pill-age {
+      padding: 0.15rem 0.4rem;
+      border-radius: 8px;
+      border: 1px solid rgba(148,163,184,0.6);
+      font-size: 0.7rem;
+      background: rgba(15,23,42,0.8);
     }
 
     .rating-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
       background: #facc15;
-      box-shadow: 0 0 8px rgba(250, 204, 21, 0.7);
-    }
-
-    .scroll-fade {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .scroll-fade::after {
-      content: "";
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 80px;
-      height: 100%;
-      background: linear-gradient(to left, #020617, transparent);
     }
 
     .footer {
-      border-top: 1px solid rgba(31, 41, 55, 0.9);
-      padding: 1.5rem 1.5rem 2rem;
+      border-top: 1px solid rgba(31,41,55,0.5);
+      padding: 2rem 1.5rem;
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.85rem;
+      text-align: center;
     }
 
-    .footer-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: color var(--transition-fast);
-    }
-
-    .footer-links a:hover { color: var(--text-main); }
-
-    /* Responsive - ORIGINAL */
+    /* RESPONSIVE */
     @media (max-width: 900px) {
-      .hero {
-        grid-template-columns: minmax(0, 1fr);
-        padding-top: 3rem;
-      }
-      .hero-right { order: -1; }
+      .hero { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1rem; }
       .nav-links { display: none; }
-      .modal-header { height: 400px; }
-      .modal-body { padding: 2rem 1.5rem 1.5rem; }
-      .modal-title { font-size: 1.8rem; }
+      .modal-header { height: 40vh; }
     }
 
     @media (max-width: 600px) {
-      .hero { padding: 3rem 1.1rem 1.5rem; }
-      .section { padding: 1rem 1.1rem 3rem; }
-      .nav-inner { padding-inline: 1.1rem; }
-      .movie-card { flex: 0 0 150px; }
-      .modal-content { margin: 1rem; max-height: 95vh; }
-      .modal-header { height: 300px; }
+      .movie-card { flex: 0 0 160px; height: 240px; }
+      .hero { padding: 1.5rem 1rem; }
+      .section { padding: 1.5rem 1rem; }
       .modal-buttons { flex-direction: column; }
-      .btn-modal { justify-content: center; width: 100%; }
+      .btn-modal { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <!-- ORIGINAL NAV - UNCHANGED -->
+  <!-- NAV -->
   <header class="nav">
     <div class="nav-inner">
       <div class="brand">
-        <div class="logo-pill">
-          <span>H</span>
-        </div>
+        <div class="logo-pill"><span>H</span></div>
         <div class="brand-text">Harshflix</div>
       </div>
-
       <nav class="nav-links">
         <span class="nav-link">Home</span>
         <span class="nav-link">Series</span>
         <span class="nav-link">Movies</span>
-        <span class="nav-link">New & Popular</span>
+        <span class="nav-link">New</span>
         <span class="nav-link">My List</span>
       </nav>
-
       <div class="nav-actions">
         <button class="btn btn-outline">Sign In</button>
         <button class="btn btn-primary">Get Started</button>
@@ -757,140 +578,64 @@
     </div>
   </header>
 
-  <!-- ORIGINAL HERO - UNCHANGED -->
   <main>
+    <!-- HERO -->
     <section class="hero">
-      <div class="hero-left">
+      <div>
         <div class="hero-badge">
           <div class="hero-badge-pill">4K</div>
-          <span>Binge-worthy stories, zero ads</span>
+          <span>Unlimited movies, TV shows</span>
         </div>
-
         <h1 class="hero-title">
-          Stream the <span>stories</span> everyone is talking about.
+          Watch <span>anywhere.</span><br>Cancel anytime.
         </h1>
-
         <p class="hero-subtitle">
-          From blockbuster movies to addictive series and originals, Harshflix brings a cinematic experience
-          to every screen at home or on the go.
+          Ready to watch? Enter your email to create or restart membership.
         </p>
-
         <div class="hero-cta">
-          <button class="btn btn-primary" style="padding-inline: 1.6rem; font-size: 0.95rem;">
-            Start free trial
-          </button>
-          <button class="btn btn-outline" style="padding-inline: 1.4rem; font-size: 0.9rem;">
-            Explore plans
-          </button>
-        </div>
-
-        <div class="hero-meta">
-          <div class="hero-meta-item">
-            <div class="dot"></div>
-            <span class="hero-highlight">New:</span>
-            <span>Fresh episodes every Friday</span>
-          </div>
-          <div class="hero-meta-item">
-            <span class="hero-highlight">1000+ titles</span>
-            <span class="hero-highlight" style="color:#22c55e;"> •</span>
-            <span>Cancel anytime</span>
-          </div>
+          <input placeholder="Email address" style="padding:0.75rem 1rem; border-radius:4px; border:1px solid rgba(148,163,184,0.6); background:rgba(15,23,42,0.8); color:white; width:250px;">
+          <button class="btn btn-primary" style="padding:0.75rem 2rem;">Get Started →</button>
         </div>
       </div>
+      <div class="glass-card">
+        <h3 style="font-size:1.2rem; margin-bottom:0.5rem;">Enjoy on your TV</h3>
+        <p style="color:var(--text-muted); font-size:0.95rem;">Watch on smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players and more.</p>
+      </div>
+    </section>
 
-      <!-- ORIGINAL Hero Right Card - UNCHANGED -->
-      <div class="hero-right">
-        <div class="glass-card">
-          <div class="card-banner">
-            <div class="card-gradient-orbit"></div>
-            <div class="card-floating-title">
-              <div>
-                <h3>Midnight Echo</h3>
-                <p style="font-size:0.75rem; color:#e5e7eb; margin-top:0.25rem;">
-                  A detective trapped in a time loop has 24 hours to rewrite the end of the world.
-                </p>
-              </div>
-              <div class="card-meta-bottom">
-                <span>
-                  <span class="pill-rating">
-                    <span>★</span>
-                    <span>9.1</span>
-                  </span>
-                  <span style="opacity:0.8;">Sci‑Fi • Thriller</span>
-                </span>
-                <span>Season 2 • New episodes</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-controls">
-            <div class="card-controls-left">
-              <button class="control-btn" title="Play">▶</button>
-              <button class="control-btn" title="Add to My List">+</button>
-              <button class="control-btn" title="More Info">ⓘ</button>
-            </div>
-            <div class="card-controls-right">
-              <div class="tiny-label">Continue watching</div>
-              <div class="progress-track">
-                <div class="progress-fill"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="floating-pill">
-            <div class="pill-dot"></div>
-            <span class="pill-muted">Live now</span>
-            <span class="pill-strong">Premiere marathon</span>
-          </div>
+    <!-- TRENDING -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Trending Now</h2>
+        <p class="section-subtitle">Popular on Harshflix</p>
+      </div>
+      <div class="cards-row" id="trending-row">
+        <div style="padding:3rem 2rem; color:var(--text-muted); font-size:0.9rem; text-align:center;">
+          Loading trending titles...
         </div>
       </div>
     </section>
 
-    <!-- ORIGINAL Trending Section -->
+    <!-- SERIES -->
     <section class="section">
       <div class="section-header">
-        <h2 class="section-title"><span>Trending</span> Now</h2>
-        <p class="section-subtitle">Top picks powered by what viewers are watching worldwide</p>
+        <h2>TV Series</h2>
+        <p class="section-subtitle">Binge-worthy shows</p>
       </div>
-
-      <div class="scroll-row">
-        <div class="cards-row" id="trending-row">
-          <!-- Filled by Firestore -->
+      <div class="cards-row" id="series-row">
+        <div style="padding:3rem 2rem; color:var(--text-muted); font-size:0.9rem; text-align:center;">
+          Loading series...
         </div>
-        <div class="scroll-fade"></div>
-      </div>
-    </section>
-
-    <!-- ORIGINAL Continue Watching -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section-title"><span>Continue</span> Watching</h2>
-        <p class="section-subtitle">Jump back into what you were watching in seconds</p>
-      </div>
-
-      <div class="scroll-row">
-        <div class="cards-row" id="series-row">
-          <!-- Filled by Firestore -->
-        </div>
-        <div class="scroll-fade"></div>
       </div>
     </section>
   </main>
 
-  <!-- ORIGINAL Footer -->
   <footer class="footer">
-    <div class="footer-inner">
-      <span>© 2025 Harshflix. All rights reserved.</span>
-      <div class="footer-links">
-        <a>Terms</a>
-        <a>Privacy</a>
-        <a>Help Center</a>
-        <a>Cookie preferences</a>
-      </div>
-    </div>
+    Questions? Call 000-800-919-1694<br>
+    <a style="color:#9ca3af;">Privacy</a> • <a style="color:#9ca3af;">Terms of Use</a> • <a style="color:#9ca3af;">Corporate Information</a>
   </footer>
 
-  <!-- NEW VIDEO MODAL -->
+  <!-- VIDEO POPUP MODAL -->
   <div class="modal-overlay" id="videoModal">
     <div class="modal-content">
       <div class="modal-header" id="modalHeader">
@@ -903,7 +648,7 @@
       </div>
       <div class="modal-body">
         <h1 class="modal-title" id="modalTitle">Loading...</h1>
-        <div class="modal-meta-row" id="modalMeta"></div>
+        <div class="modal-meta" id="modalMeta"></div>
         <div class="modal-buttons">
           <button class="btn-modal btn-play">
             <span>▶</span> Play
@@ -912,22 +657,15 @@
             <span>+</span> My List
           </button>
         </div>
-        <p class="modal-description" id="modalDescription">Loading details...</p>
+        <p class="modal-description" id="modalDescription">Loading...</p>
         <div class="modal-tags" id="modalTags"></div>
       </div>
     </div>
   </div>
 
-  <!-- Firebase + Modal Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      onSnapshot,
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCWHM-Uh4SOuhmYEz35c3nKpsapJYwl1pE",
@@ -935,14 +673,13 @@
       projectId: "streamingsite-85113",
       storageBucket: "streamingsite-85113.firebasestorage.app",
       messagingSenderId: "525979195033",
-      appId: "1:525979195033:web:ed9c2bc3e66720ef0c0a08",
-      measurementId: "G-CCS3XZ79EW"
+      appId: "1:525979195033:web:ed9c2bc3e66720ef0c0a08"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Modal controls
+    // Modal
     const modal = document.getElementById('videoModal');
     const modalClose = document.getElementById('modalClose');
     const modalTitle = document.getElementById('modalTitle');
@@ -952,128 +689,101 @@
     const modalBadges = document.getElementById('modalBadges');
     const modalTags = document.getElementById('modalTags');
 
-    function closeModal() {
-      modal.classList.remove('active');
-    }
+    function closeModal() { modal.classList.remove('active'); }
+    
+    modalClose.onclick = closeModal;
+    modal.onclick = (e) => { if(e.target === modal) closeModal(); };
 
-    modalClose.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
-
-    async function showVideoModal(videoData) {
-      modalTitle.textContent = videoData.title || 'Untitled';
-      modalDescription.textContent = videoData.description || 'No description available.';
+    async function showModal(data) {
+      modalTitle.textContent = data.title || 'Untitled';
+      modalDescription.textContent = data.description || 'No description available.';
       
-      const rating = videoData.rating ? `${videoData.rating.toFixed(1)}★` : '—';
+      const rating = data.rating ? data.rating.toFixed(1) : '—';
       modalMeta.innerHTML = `
-        <div class="meta-group">
-          <span>${videoData.duration || '—'}</span>
-          <div class="meta-dot"></div>
-          <span>${videoData.genre || '—'}</span>
-          <div class="meta-dot"></div>
-          <span>${videoData.age || '—'}</span>
+        <div>
+          <span>${data.duration || '—'}</span>
+          <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block;margin:0 0.75rem;"></span>
+          <span>${data.genre || '—'}</span>
+          <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block;margin:0 0.75rem;"></span>
+          <span>${data.age || '—'}</span>
         </div>
-        <div class="meta-group">
-          <div class="modal-rating">★ ${rating}</div>
-        </div>
+        <div class="modal-rating">★ ${rating}</div>
       `;
 
-      modalPoster.style.backgroundImage = videoData.thumbnail 
-        ? `url(${videoData.thumbnail})` 
-        : 'linear-gradient(135deg, #020617, #0f172a)';
-
-      const tags = Array.isArray(videoData.tags) ? videoData.tags : [];
-      modalBadges.innerHTML = tags.map(tag => 
-        `<div class="modal-badge">${tag}</div>`
-      ).join('');
+      modalPoster.style.backgroundImage = data.thumbnail ? `url(${data.thumbnail})` : 'linear-gradient(135deg, #374151, #1f2937)';
       
-      modalTags.innerHTML = tags.map(tag => 
-        `<div class="tag-chip">${tag}</div>`
-      ).join('') || '<div class="tag-chip">No tags</div>';
+      const tags = Array.isArray(data.tags) ? data.tags : [];
+      modalBadges.innerHTML = tags.map(t => `<div class="modal-badge">${t}</div>`).join('') || '';
+      modalTags.innerHTML = tags.map(t => `<div class="tag-chip">${t}</div>`).join('') || '<div class="tag-chip">No tags</div>';
 
       modal.classList.add('active');
     }
 
-    // Create clickable card
     function createCard(doc) {
       const data = doc.data();
       const card = document.createElement('article');
       card.className = 'movie-card';
-      card.dataset.videoId = doc.id;
+      card.dataset.id = doc.id;
 
-      const badgeText =
-        (Array.isArray(data.tags) ? data.tags : []).find(t => 
-          ['Original', 'Trending', 'Top 10', 'New'].includes(t)
-        ) || data.type || 'Movie';
+      const badge = (Array.isArray(data.tags) ? data.tags.find(t => ['Trending','Top 10','New','Original'].includes(t)) : '') || (data.type || 'Movie');
 
       card.innerHTML = `
         <div class="movie-thumb">
-          ${data.thumbnail ? `<img src="${data.thumbnail}" alt="${data.title} poster" />` : ''}
+          ${data.thumbnail ? `<img src="${data.thumbnail}" alt="${data.title}">` : ''}
           <div class="thumb-overlay"></div>
-          <div class="thumb-badge">${badgeText}</div>
+          <div class="thumb-badge">${badge}</div>
           <div class="thumb-play">
             <div class="thumb-play-icon"><span>▶</span></div>
           </div>
         </div>
-        <div class="movie-meta-top">
-          <span>${data.type === 'Series' ? (data.duration || 'S1') : 'Movie'}</span>
-          <span class="pill-age">${data.age || '—'}</span>
-        </div>
-        <h3 class="movie-title">${data.title || 'Untitled'}</h3>
-        <div class="movie-extra">
-          <span>${data.duration || '—'} • ${data.genre || '—'}</span>
-          <span>${data.rating ? `<span class="rating-dot"></span> ${data.rating.toFixed(1)}` : ''}</span>
+        <div class="movie-info">
+          <div class="movie-title">${data.title || 'Untitled'}</div>
+          <div class="movie-meta">
+            <span>${data.duration || data.type === 'Series' ? 'S1' : 'Movie'}</span>
+            <span class="pill-age">${data.age || '—'}</span>
+          </div>
         </div>
       `;
 
-      // CLICK = OPEN MODAL
-      card.addEventListener('click', async () => {
+      card.onclick = async () => {
         try {
-          const videoDoc = await getDoc(doc(db, 'titles', doc.id));
-          if (videoDoc.exists()) {
-            showVideoModal(videoDoc.data());
-          }
-        } catch (error) {
-          console.error('Error loading video details:', error);
-        }
-      });
+          const snap = await getDoc(doc(db, 'titles', doc.id));
+          if(snap.exists()) showModal(snap.data());
+        } catch(e) { console.error(e); }
+      };
 
       return card;
     }
 
-    // ORIGINAL render logic
-    const trendingRow = document.getElementById("trending-row");
-    const seriesRow = document.getElementById("series-row");
+    const trendingRow = document.getElementById('trending-row');
+    const seriesRow = document.getElementById('series-row');
 
-    function renderRows(snapshot) {
-      trendingRow.innerHTML = "";
-      seriesRow.innerHTML = "";
+    function render(snapshot) {
+      trendingRow.innerHTML = '';
+      seriesRow.innerHTML = '';
 
       snapshot.forEach(doc => {
         const data = doc.data();
         const tags = Array.isArray(data.tags) ? data.tags : [];
         const card = createCard(doc);
 
-        if (tags.includes("Trending") || tags.includes("Top 10")) {
+        if(tags.includes('Trending') || tags.includes('Top 10')) {
           trendingRow.appendChild(card.cloneNode(true));
         }
-
-        if (data.type === "Series") {
+        if(data.type === 'Series') {
           seriesRow.appendChild(card.cloneNode(true));
         }
       });
 
-      if (!trendingRow.children.length) {
-        trendingRow.innerHTML = "<span style='color:#9ca3af; font-size:0.85rem;'>No trending titles yet. Add some in Harshflix admin.</span>";
+      if(!trendingRow.children.length) {
+        trendingRow.innerHTML = '<div style="padding:3rem 2rem;color:var(--text-muted);">No trending titles yet</div>';
       }
-      if (!seriesRow.children.length) {
-        seriesRow.innerHTML = "<span style='color:#9ca3af; font-size:0.85rem;'>No series yet. Add titles of type 'Series' in Harshflix admin.</span>";
+      if(!seriesRow.children.length) {
+        seriesRow.innerHTML = '<div style="padding:3rem 2rem;color:var(--text-muted);">No series yet</div>';
       }
     }
 
-    const titlesRef = collection(db, 'titles');
-    onSnapshot(titlesRef, renderRows);
+    onSnapshot(collection(db, 'titles'), render);
   </script>
 </body>
 </html>
