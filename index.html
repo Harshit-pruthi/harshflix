@@ -1,74 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Harshflix - Watch Anywhere</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #050816;
-      --bg-elevated: #101827;
+      --bg: #141414;
+      --surface: #181818;
+      --text: #fff;
+      --text-secondary: #b3b3b3;
       --accent: #e50914;
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
-      --card-radius: 0.5rem;
-      --transition-fast: 0.2s ease;
+      --border: rgba(255,255,255,0.1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
-      font-family: "Poppins", system-ui, sans-serif;
-      background: radial-gradient(circle at top, #111827 0, #020617 40%, #000 100%);
-      color: var(--text-main);
-      min-height: 100vh;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       overflow-x: hidden;
     }
 
-    /* POPUP MODAL */
-    .modal-overlay {
+    /* NAVIGATION */
+    .nav {
       position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
-      backdrop-filter: blur(8px);
+      top: 0;
+      width: 100%;
+      padding: 0.5rem 4%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
       z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #e50914, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
       transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: transparent;
+      border: 1px solid var(--text-secondary);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e50914, #ff6b6b);
+      color: white;
+    }
+
+    /* MAIN CONTENT */
+    .hero {
+      height: 70vh;
+      background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #141414 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1rem;
+      text-align: center;
+      position: relative;
     }
 
-    .modal-overlay.active {
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('https://images.unsplash.com/photo-1489599511529-a7a9484ab725?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover;
+      opacity: 0.3;
+      z-index: 1;
+    }
+
+    .hero-content {
+      z-index: 2;
+      max-width: 600px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+    }
+
+    .hero-input {
+      display: flex;
+      max-width: 400px;
+      margin: 0 auto 1rem;
+      gap: 1rem;
+    }
+
+    .hero-input input {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 1rem;
+    }
+
+    .hero-input input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 4rem 4% 2rem;
+    }
+
+    .section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+
+    .cards-container {
+      display: flex;
+      gap: 1.2rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      scrollbar-width: none;
+    }
+
+    .cards-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* MOVIE CARDS */
+    .movie-card {
+      min-width: 180px;
+      height: 260px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: var(--accent);
+      box-shadow: 0 20px 40px rgba(229,9,20,0.3);
+    }
+
+    .movie-poster {
+      width: 100%;
+      height: 65%;
+      background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .movie-poster img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .movie-card:hover .play-overlay {
       opacity: 1;
-      visibility: visible;
+    }
+
+    .play-button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--bg);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      cursor: pointer;
+    }
+
+    .movie-info {
+      padding: 1rem;
+      height: 35%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .movie-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .movie-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .duration-badge {
+      background: rgba(229,9,20,0.2);
+      color: var(--accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    /* POPUP MODAL - EXACT LIKE SCREENSHOT */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal.active {
+      display: flex;
     }
 
     .modal-content {
       width: 100%;
-      max-width: 800px;
+      max-width: 900px;
       max-height: 90vh;
-      background: rgba(15,23,42,0.98);
-      border-radius: 1rem;
-      border: 1px solid rgba(148,163,184,0.3);
+      background: var(--surface);
+      border-radius: 12px;
       overflow: hidden;
-      transform: scale(0.9);
-      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+      animation: modalSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .modal-overlay.active .modal-content { transform: scale(1); }
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
 
     .modal-header {
+      height: 50vh;
       position: relative;
-      height: 45vh;
-      min-height: 300px;
-      background: linear-gradient(135deg, #1e293b 0%, #020617 100%);
-      overflow: hidden;
+      background: linear-gradient(135deg, var(--surface) 0%, #000 100%);
     }
 
     .modal-poster {
@@ -76,596 +324,197 @@
       inset: 0;
       background-size: cover;
       background-position: center;
-      opacity: 0.12;
+      opacity: 0.15;
     }
 
-    .modal-gradient {
+    .modal-overlay-gradient {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.9) 60%);
-    }
-
-    .modal-top-controls {
-      position: absolute;
-      top: 1.5rem;
-      left: 1.5rem;
-      right: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 10;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.9) 70%);
     }
 
     .modal-close {
-      width: 40px;
-      height: 40px;
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      font-size: 1.4rem;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      color: #e5e7eb;
+      transition: all 0.3s ease;
+      z-index: 10;
     }
 
     .modal-close:hover {
-      background: rgba(239,68,68,0.9);
-      border-color: #ef4444;
+      background: rgba(229,9,20,0.8);
+      border-color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    .modal-badges {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      display: flex;
+      gap: 0.75rem;
+      z-index: 10;
+    }
+
+    .badge {
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     .modal-body {
-      padding: 2rem;
-      max-height: 55vh;
+      padding: 2.5rem 2.5rem 2rem;
+      max-height: 50vh;
       overflow-y: auto;
     }
 
     .modal-title {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.5rem;
+      font-weight: 500;
       margin-bottom: 1rem;
       line-height: 1.1;
     }
 
-    .modal-meta {
+    .modal-meta-row {
       display: flex;
       align-items: center;
       gap: 1.5rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-      color: var(--text-muted);
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      font-size: 1rem;
     }
 
-    .meta-dot { 
-      width: 6px; 
-      height: 6px; 
-      border-radius: 50%; 
-      background: #22c55e; 
-    }
-
-    .modal-rating {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.4rem 0.8rem;
-      border-radius: 20px;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148,163,184,0.6);
-      color: #facc15;
-      font-weight: 600;
+    .meta-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
     }
 
     .modal-buttons {
       display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
     }
-
-    .btn-modal {
-      flex: 1;
-      padding: 0.8rem 1.5rem;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-      font-weight: 500;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      font-size: 0.95rem;
-    }
-
-    .btn-play {
-      background: linear-gradient(135deg, #f97316, #e11d48);
-      color: white;
-      box-shadow: 0 8px 25px rgba(249,115,22,0.4);
-    }
-
-    .btn-play:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(249,115,22,0.6); }
-
-    .btn-add {
-      background: transparent;
-      border: 1px solid rgba(148,163,184,0.6);
-      color: var(--text-main);
-    }
-
-    .btn-add:hover { background: rgba(15,23,42,0.8); }
 
     .modal-description {
-      color: #e5e7eb;
+      color: #e5e5e5;
       line-height: 1.6;
-      margin-bottom: 1.5rem;
-      font-size: 1rem;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
     }
 
     .modal-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-
-    .tag-chip {
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      background: rgba(15,23,42,0.8);
-      border: 1px solid rgba(148,163,184,0.5);
-      font-size: 0.8rem;
-      color: #e5e7eb;
-    }
-
-    /* ORIGINAL PERFECT UI */
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
-      backdrop-filter: blur(16px);
-      padding: 0.5rem 0;
-    }
-
-    .nav-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .logo-pill {
-      width: 36px;
-      height: 36px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #f97316, #e11d48 40%, #7c3aed);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 20px rgba(248,113,113,0.4);
-    }
-
-    .logo-pill span { font-size: 1.2rem; font-weight: 700; }
-
-    .brand-text {
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      font-size: 1.1rem;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      font-size: 0.95rem;
-    }
-
-    .nav-link {
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: color 0.2s ease;
-      position: relative;
-    }
-
-    .nav-link:hover { color: var(--text-main); }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .btn {
-      border-radius: 999px;
-      padding: 0.5rem 1.2rem;
-      font-size: 0.9rem;
-      border: 1px solid transparent;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text-main);
-      transition: all 0.2s ease;
-      font-weight: 500;
-    }
-
-    .btn-outline {
-      border-color: rgba(148,163,184,0.7);
-      color: var(--text-muted);
-    }
-
-    .btn-outline:hover {
-      border-color: #e5e7eb;
-      background: rgba(15,23,42,0.8);
-    }
-
-    .btn-primary {
-      background: radial-gradient(circle, #f97316, #e11d48 50%, #6366f1);
-      box-shadow: 0 8px 25px rgba(239,68,68,0.4);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 35px rgba(239,68,68,0.6);
-    }
-
-    .hero {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 4rem 1.5rem 2rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.2rem 0.75rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.6);
-      background: rgba(56,189,248,0.15);
-      margin-bottom: 1rem;
-      font-size: 0.85rem;
-    }
-
-    .hero-badge-pill {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #a855f7, #ec4899);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    .hero-title {
-      font-size: clamp(2.5rem, 5vw, 3.5rem);
-      line-height: 1.1;
-      margin-bottom: 1rem;
-    }
-
-    .hero-title span {
-      background: linear-gradient(to right, #f97316, #e11d48, #6366f1);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-subtitle {
-      color: var(--text-muted);
-      font-size: 1rem;
-      line-height: 1.6;
-      max-width: 28rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-cta {
-      display: flex;
       gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .glass-card {
-      border-radius: 1rem;
-      padding: 1.5rem;
-      background: radial-gradient(circle at top left, rgba(248,250,252,0.1), rgba(15,23,42,0.95));
-      border: 1px solid rgba(148,163,184,0.3);
-      box-shadow: 0 25px 70px rgba(0,0,0,0.8);
-    }
-
-    .section {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-    }
-
-    .section-header h2 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .section-subtitle {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    .cards-row {
-      display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      padding-bottom: 1rem;
-      scrollbar-width: none;
-    }
-
-    .cards-row::-webkit-scrollbar { display: none; }
-
-    /* FIXED PERFECT NETFLIX CARDS */
-    .movie-card {
-      flex: 0 0 200px;
-      height: 280px;
-      border-radius: var(--card-radius);
-      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-      border: 2px solid transparent;
-      overflow: hidden;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .movie-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      border-color: rgba(148,163,184,0.6);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-    }
-
-    .movie-thumb {
-      height: 70%;
-      background: linear-gradient(135deg, #374151, #1f2937);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .movie-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .thumb-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(45deg, rgba(249,115,22,0.3), rgba(236,72,153,0.2));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .movie-card:hover .thumb-overlay { opacity: 1; }
-
-    .thumb-badge {
-      position: absolute;
-      top: 0.75rem;
-      left: 0.75rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 12px;
-      background: rgba(15,23,42,0.95);
-      border: 1px solid rgba(148,163,184,0.8);
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: white;
-    }
-
-    .thumb-play {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .movie-card:hover .thumb-play { opacity: 1; }
-
-    .thumb-play-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-    }
-
-    .thumb-play-icon span {
-      font-size: 1.3rem;
-      margin-left: 2px;
-      color: #1f2937;
-      font-weight: 700;
-    }
-
-    .movie-info {
-      padding: 0.75rem 0.75rem 1rem;
-      height: 30%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .movie-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-      line-height: 1.2;
-      color: var(--text-main);
-    }
-
-    .movie-meta {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .pill-age {
-      padding: 0.15rem 0.4rem;
-      border-radius: 8px;
-      border: 1px solid rgba(148,163,184,0.6);
-      font-size: 0.7rem;
-      background: rgba(15,23,42,0.8);
-    }
-
-    .rating-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #facc15;
-    }
-
-    .footer {
-      border-top: 1px solid rgba(31,41,55,0.5);
-      padding: 2rem 1.5rem;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      text-align: center;
     }
 
     /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1rem; }
+    @media (max-width: 768px) {
       .nav-links { display: none; }
+      .hero-input { flex-direction: column; align-items: center; }
+      .hero-input input { width: 100%; max-width: 300px; }
+      .movie-card { min-width: 140px; height: 210px; }
+      .modal-content { margin: 1rem; max-height: 95vh; }
       .modal-header { height: 40vh; }
-    }
-
-    @media (max-width: 600px) {
-      .movie-card { flex: 0 0 160px; height: 240px; }
-      .hero { padding: 1.5rem 1rem; }
-      .section { padding: 1.5rem 1rem; }
       .modal-buttons { flex-direction: column; }
-      .btn-modal { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <!-- NAV -->
-  <header class="nav">
-    <div class="nav-inner">
-      <div class="brand">
-        <div class="logo-pill"><span>H</span></div>
-        <div class="brand-text">Harshflix</div>
-      </div>
-      <nav class="nav-links">
-        <span class="nav-link">Home</span>
-        <span class="nav-link">Series</span>
-        <span class="nav-link">Movies</span>
-        <span class="nav-link">New</span>
-        <span class="nav-link">My List</span>
-      </nav>
-      <div class="nav-actions">
-        <button class="btn btn-outline">Sign In</button>
-        <button class="btn btn-primary">Get Started</button>
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <div class="logo">Harshflix</div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Series</a></li>
+      <li><a href="#">Movies</a></li>
+      <li><a href="#">New & Popular</a></li>
+      <li><a href="#">My List</a></li>
+    </ul>
+    <div class="nav-buttons">
+      <a href="#" class="btn btn-secondary">Sign In</a>
+      <a href="#" class="btn btn-primary">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Unlimited movies, TV shows and more</h1>
+      <p>Watch anywhere. Cancel anytime.</p>
+      <div class="hero-input">
+        <input type="email" placeholder="Email address">
+        <button class="btn btn-primary">Get Started ></button>
       </div>
     </div>
-  </header>
+  </section>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero">
-      <div>
-        <div class="hero-badge">
-          <div class="hero-badge-pill">4K</div>
-          <span>Unlimited movies, TV shows</span>
-        </div>
-        <h1 class="hero-title">
-          Watch <span>anywhere.</span><br>Cancel anytime.
-        </h1>
-        <p class="hero-subtitle">
-          Ready to watch? Enter your email to create or restart membership.
-        </p>
-        <div class="hero-cta">
-          <input placeholder="Email address" style="padding:0.75rem 1rem; border-radius:4px; border:1px solid rgba(148,163,184,0.6); background:rgba(15,23,42,0.8); color:white; width:250px;">
-          <button class="btn btn-primary" style="padding:0.75rem 2rem;">Get Started →</button>
-        </div>
-      </div>
-      <div class="glass-card">
-        <h3 style="font-size:1.2rem; margin-bottom:0.5rem;">Enjoy on your TV</h3>
-        <p style="color:var(--text-muted); font-size:0.95rem;">Watch on smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players and more.</p>
-      </div>
-    </section>
+  <!-- TRENDING SECTION -->
+  <section class="section">
+    <h2>Trending Now</h2>
+    <div class="cards-container" id="trending">
+      <!-- Cards loaded here -->
+    </div>
+  </section>
 
-    <!-- TRENDING -->
-    <section class="section">
-      <div class="section-header">
-        <h2>Trending Now</h2>
-        <p class="section-subtitle">Popular on Harshflix</p>
-      </div>
-      <div class="cards-row" id="trending-row">
-        <div style="padding:3rem 2rem; color:var(--text-muted); font-size:0.9rem; text-align:center;">
-          Loading trending titles...
-        </div>
-      </div>
-    </section>
+  <!-- SERIES SECTION -->
+  <section class="section">
+    <h2>TV Series</h2>
+    <div class="cards-container" id="series">
+      <!-- Cards loaded here -->
+    </div>
+  </section>
 
-    <!-- SERIES -->
-    <section class="section">
-      <div class="section-header">
-        <h2>TV Series</h2>
-        <p class="section-subtitle">Binge-worthy shows</p>
-      </div>
-      <div class="cards-row" id="series-row">
-        <div style="padding:3rem 2rem; color:var(--text-muted); font-size:0.9rem; text-align:center;">
-          Loading series...
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    Questions? Call 000-800-919-1694<br>
-    <a style="color:#9ca3af;">Privacy</a> • <a style="color:#9ca3af;">Terms of Use</a> • <a style="color:#9ca3af;">Corporate Information</a>
-  </footer>
-
-  <!-- VIDEO POPUP MODAL -->
-  <div class="modal-overlay" id="videoModal">
+  <!-- VIDEO MODAL - EXACT LIKE YOUR SCREENSHOT -->
+  <div class="modal" id="videoModal">
     <div class="modal-content">
-      <div class="modal-header" id="modalHeader">
+      <div class="modal-header">
         <div class="modal-poster" id="modalPoster"></div>
-        <div class="modal-gradient"></div>
-        <div class="modal-top-controls">
-          <div class="modal-badge-row" id="modalBadges"></div>
-          <button class="modal-close" id="modalClose">×</button>
-        </div>
+        <div class="modal-overlay-gradient"></div>
+        <div class="modal-badges" id="modalBadges"></div>
+        <button class="modal-close" id="modalClose">&times;</button>
       </div>
       <div class="modal-body">
         <h1 class="modal-title" id="modalTitle">Loading...</h1>
-        <div class="modal-meta" id="modalMeta"></div>
+        <div class="modal-meta-row" id="modalMeta">
+          <!-- Meta info -->
+        </div>
         <div class="modal-buttons">
-          <button class="btn-modal btn-play">
-            <span>▶</span> Play
+          <button class="btn btn-primary" style="padding:1rem 2rem; font-size:1.1rem;">
+            <span style="margin-right:0.5rem;">&#9654;</span>Play
           </button>
-          <button class="btn-modal btn-add">
-            <span>+</span> My List
+          <button class="btn btn-secondary" style="padding:1rem 2rem; font-size:1.1rem;">
+            <span style="margin-right:0.5rem;">+</span>My List
           </button>
         </div>
-        <p class="modal-description" id="modalDescription">Loading...</p>
+        <p class="modal-description" id="modalDesc">Loading description...</p>
         <div class="modal-tags" id="modalTags"></div>
       </div>
     </div>
   </div>
 
+  <!-- FIREBASE -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    // Firebase config
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getFirestore, collection, onSnapshot, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyCWHM-Uh4SOuhmYEz35c3nKpsapJYwl1pE",
@@ -679,111 +528,135 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Modal
+    // DOM Elements
+    const trendingContainer = document.getElementById('trending');
+    const seriesContainer = document.getElementById('series');
     const modal = document.getElementById('videoModal');
     const modalClose = document.getElementById('modalClose');
     const modalTitle = document.getElementById('modalTitle');
     const modalMeta = document.getElementById('modalMeta');
-    const modalDescription = document.getElementById('modalDescription');
+    const modalDesc = document.getElementById('modalDesc');
     const modalPoster = document.getElementById('modalPoster');
     const modalBadges = document.getElementById('modalBadges');
     const modalTags = document.getElementById('modalTags');
 
-    function closeModal() { modal.classList.remove('active'); }
-    
-    modalClose.onclick = closeModal;
-    modal.onclick = (e) => { if(e.target === modal) closeModal(); };
-
-    async function showModal(data) {
+    // Modal controls
+    function openModal(data) {
       modalTitle.textContent = data.title || 'Untitled';
-      modalDescription.textContent = data.description || 'No description available.';
+      modalDesc.textContent = data.description || 'No description available.';
       
-      const rating = data.rating ? data.rating.toFixed(1) : '—';
+      // Meta
+      const rating = data.rating ? `${data.rating.toFixed(1)}` : 'N/A';
       modalMeta.innerHTML = `
-        <div>
-          <span>${data.duration || '—'}</span>
-          <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block;margin:0 0.75rem;"></span>
-          <span>${data.genre || '—'}</span>
-          <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block;margin:0 0.75rem;"></span>
-          <span>${data.age || '—'}</span>
-        </div>
-        <div class="modal-rating">★ ${rating}</div>
+        <span>${data.duration || '—'}</span>
+        <div class="meta-dot"></div>
+        <span>${data.genre || '—'}</span>
+        <div class="meta-dot"></div>
+        <span>${data.age || '—'}</span>
+        <div class="meta-dot"></div>
+        <span>${rating}</span>
       `;
 
-      modalPoster.style.backgroundImage = data.thumbnail ? `url(${data.thumbnail})` : 'linear-gradient(135deg, #374151, #1f2937)';
-      
+      // Poster
+      modalPoster.style.backgroundImage = data.thumbnail 
+        ? `url(${data.thumbnail})` 
+        : 'linear-gradient(135deg, #333 0%, #111 100%)';
+
+      // Badges
       const tags = Array.isArray(data.tags) ? data.tags : [];
-      modalBadges.innerHTML = tags.map(t => `<div class="modal-badge">${t}</div>`).join('') || '';
-      modalTags.innerHTML = tags.map(t => `<div class="tag-chip">${t}</div>`).join('') || '<div class="tag-chip">No tags</div>';
+      modalBadges.innerHTML = tags.map(tag => `<div class="badge">${tag}</div>`).join('');
+
+      // Tags row
+      modalTags.innerHTML = tags.map(tag => `<div class="badge">${tag}</div>`).join('');
 
       modal.classList.add('active');
     }
 
+    function closeModal() {
+      modal.classList.remove('active');
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Create movie card
     function createCard(doc) {
       const data = doc.data();
-      const card = document.createElement('article');
+      const card = document.createElement('div');
       card.className = 'movie-card';
       card.dataset.id = doc.id;
 
-      const badge = (Array.isArray(data.tags) ? data.tags.find(t => ['Trending','Top 10','New','Original'].includes(t)) : '') || (data.type || 'Movie');
+      const badgeText = (Array.isArray(data.tags) ? data.tags.find(t => 
+        ['Trending','Top 10','New','Original'].includes(t)) : '') || (data.type || 'Movie');
 
       card.innerHTML = `
-        <div class="movie-thumb">
+        <div class="movie-poster">
           ${data.thumbnail ? `<img src="${data.thumbnail}" alt="${data.title}">` : ''}
-          <div class="thumb-overlay"></div>
-          <div class="thumb-badge">${badge}</div>
-          <div class="thumb-play">
-            <div class="thumb-play-icon"><span>▶</span></div>
+          <div class="play-overlay">
+            <div class="play-button">&#9654;</div>
           </div>
         </div>
         <div class="movie-info">
           <div class="movie-title">${data.title || 'Untitled'}</div>
           <div class="movie-meta">
-            <span>${data.duration || data.type === 'Series' ? 'S1' : 'Movie'}</span>
-            <span class="pill-age">${data.age || '—'}</span>
+            <span>${data.duration || (data.type === 'Series' ? 'Season 1' : 'Movie')}</span>
+            <span class="duration-badge">${badgeText}</span>
           </div>
         </div>
       `;
 
-      card.onclick = async () => {
+      // Click handler
+      card.addEventListener('click', async () => {
         try {
-          const snap = await getDoc(doc(db, 'titles', doc.id));
-          if(snap.exists()) showModal(snap.data());
-        } catch(e) { console.error(e); }
-      };
+          const videoDoc = await getDoc(doc(db, 'titles', doc.id));
+          if (videoDoc.exists()) {
+            openModal(videoDoc.data());
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      });
 
       return card;
     }
 
-    const trendingRow = document.getElementById('trending-row');
-    const seriesRow = document.getElementById('series-row');
+    // Render cards
+    function renderCards(snapshot) {
+      trendingContainer.innerHTML = '';
+      seriesContainer.innerHTML = '';
 
-    function render(snapshot) {
-      trendingRow.innerHTML = '';
-      seriesRow.innerHTML = '';
-
-      snapshot.forEach(doc => {
+      snapshot.forEach((doc) => {
         const data = doc.data();
         const tags = Array.isArray(data.tags) ? data.tags : [];
         const card = createCard(doc);
 
-        if(tags.includes('Trending') || tags.includes('Top 10')) {
-          trendingRow.appendChild(card.cloneNode(true));
+        // Trending section
+        if (tags.includes('Trending') || tags.includes('Top 10')) {
+          trendingContainer.appendChild(card.cloneNode(true));
         }
-        if(data.type === 'Series') {
-          seriesRow.appendChild(card.cloneNode(true));
+
+        // Series section
+        if (data.type === 'Series') {
+          seriesContainer.appendChild(card.cloneNode(true));
         }
       });
 
-      if(!trendingRow.children.length) {
-        trendingRow.innerHTML = '<div style="padding:3rem 2rem;color:var(--text-muted);">No trending titles yet</div>';
+      // Empty states
+      if (!trendingContainer.children.length) {
+        trendingContainer.innerHTML = '<div style="padding: 3rem; color: var(--text-secondary); text-align: center; width: 100%;">No trending titles yet. Check Harshflix Admin.</div>';
       }
-      if(!seriesRow.children.length) {
-        seriesRow.innerHTML = '<div style="padding:3rem 2rem;color:var(--text-muted);">No series yet</div>';
+      if (!seriesContainer.children.length) {
+        seriesContainer.innerHTML = '<div style="padding: 3rem; color: var(--text-secondary); text-align: center; width: 100%;">No series yet. Add in Admin.</div>';
       }
     }
 
-    onSnapshot(collection(db, 'titles'), render);
+    // Listen to Firestore
+    const titlesRef = collection(db, 'titles');
+    onSnapshot(titlesRef, renderCards, (error) => {
+      console.error('Firestore error:', error);
+    });
   </script>
 </body>
 </html>
