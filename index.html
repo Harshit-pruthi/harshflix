@@ -61,7 +61,11 @@
 
     .logo-pill span { font-size: 1.2rem; font-weight: 700; }
 
-    .brand-text { font-weight: 600; letter-spacing: 0.06em; font-size: 1.1rem; }
+    .brand-text {
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      font-size: 1.1rem;
+    }
 
     .nav-links {
       display: flex;
@@ -70,10 +74,19 @@
       font-size: 0.95rem;
     }
 
-    .nav-link { color: var(--text-muted); cursor: pointer; transition: color 0.2s ease; }
+    .nav-link {
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
     .nav-link:hover { color: var(--text-main); }
 
-    .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
 
     .btn {
       border-radius: 999px;
@@ -87,15 +100,25 @@
       font-weight: 500;
     }
 
-    .btn-outline { border-color: rgba(148,163,184,0.7); color: var(--text-muted); }
-    .btn-outline:hover { border-color: #e5e7eb; background: rgba(15,23,42,0.8); }
+    .btn-outline {
+      border-color: rgba(148,163,184,0.7);
+      color: var(--text-muted);
+    }
+
+    .btn-outline:hover {
+      border-color: #e5e7eb;
+      background: rgba(15,23,42,0.8);
+    }
 
     .btn-primary {
       background: radial-gradient(circle, #f97316, #e11d48 50%, #6366f1);
       box-shadow: 0 8px 25px rgba(239,68,68,0.4);
     }
 
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 35px rgba(239,68,68,0.6); }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 35px rgba(239,68,68,0.6);
+    }
 
     .hero {
       max-width: 1280px;
@@ -183,8 +206,15 @@
       padding: 2rem 1.5rem;
     }
 
-    .section-header h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-    .section-subtitle { color: var(--text-muted); font-size: 0.85rem; }
+    .section-header h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
 
     .cards-row {
       display: flex;
@@ -373,8 +403,8 @@
           Ready to watch? Enter your email to create or restart membership.
         </p>
         <div class="hero-cta">
-          <input placeholder="Email address">
-          <button class="btn btn-primary">Get Started →</button>
+          <input placeholder="Email address" style="padding:0.75rem 1rem; border-radius:4px; border:1px solid rgba(148,163,184,0.6); background:rgba(15,23,42,0.8); color:white; width:250px;">
+          <button class="btn btn-primary" style="padding:0.75rem 2rem;">Get Started →</button>
         </div>
       </div>
       <div class="glass-card">
@@ -434,7 +464,6 @@
       const card = document.createElement('article');
       card.className = 'movie-card';
       card.dataset.videoId = doc.id;
-      card.dataset.videoSource = data.source || '';
 
       const badge = (Array.isArray(data.tags) ? data.tags.find(t => ['Trending','Top 10','New','Original'].includes(t)) : '') || (data.type || 'Movie');
 
@@ -456,19 +485,25 @@
         </div>
       `;
 
-      // CLICK OPENS PLAYER PAGE
-      card.addEventListener('click', () => {
-        const videoId = doc.id;
-        const videoSource = data.source || '';
-        const videoData = encodeURIComponent(JSON.stringify({
-          id: videoId,
-          title: data.title || 'Untitled',
-          thumbnail: data.thumbnail || '',
-          source: videoSource,
-          duration: data.duration || '',
-          genre: data.genre || ''
-        }));
-        window.open(`player.html?video=${videoData}`, '_blank');
+      // **CLICK OPENS PLAYER.HTML**
+      card.addEventListener('click', async () => {
+        try {
+          const videoDoc = await getDoc(doc(db, 'titles', doc.id));
+          if (videoDoc.exists()) {
+            const videoData = videoDoc.data();
+            // Pass video data to player.html via URL params
+            const params = new URLSearchParams({
+              id: doc.id,
+              title: videoData.title || '',
+              source: videoData.source || '',
+              thumbnail: videoData.thumbnail || '',
+              description: videoData.description || ''
+            });
+            window.open(`player.html?${params.toString()}`, '_blank');
+          }
+        } catch (error) {
+          console.error('Error opening player:', error);
+        }
       });
 
       return card;
@@ -486,18 +521,18 @@
         const tags = Array.isArray(data.tags) ? data.tags : [];
         const card = createCard(doc);
 
-        if(tags.includes('Trending') || tags.includes('Top 10')) {
+        if (tags.includes('Trending') || tags.includes('Top 10')) {
           trendingRow.appendChild(card.cloneNode(true));
         }
-        if(data.type === 'Series') {
+        if (data.type === 'Series') {
           seriesRow.appendChild(card.cloneNode(true));
         }
       });
 
-      if(!trendingRow.children.length) {
+      if (!trendingRow.children.length) {
         trendingRow.innerHTML = '<div style="padding:3rem 2rem;color:var(--text-muted);">No trending titles yet</div>';
       }
-      if(!seriesRow.children.length) {
+      if (!seriesRow.children.length) {
         seriesRow.innerHTML = '<div style="padding:3rem 2rem;color:var(--text-muted);">No series yet</div>';
       }
     }
